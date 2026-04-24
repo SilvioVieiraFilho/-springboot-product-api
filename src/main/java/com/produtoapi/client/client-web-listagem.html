@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+</head>
+
+<body>
+
+    <h2>Lista de Produtos - HTML/Javascript</h2>
+
+    <table id="ProdutosTable" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <div id="erroMensagem" style="color: red; display: none;"></div>
+    <div id="totalProdutos">Total de produtos: 0</div>
+
+    <script>
+
+        function listarProdutos() {
+
+            fetch('http://localhost:8080/produto')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na rede ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    const tableBody = document
+                        .getElementById('ProdutosTable')
+                        .getElementsByTagName('tbody')[0];
+
+                    tableBody.innerHTML = ""; // limpa tabela
+
+                    let totalProdutos = 0;
+
+                    data.forEach(produto => {
+
+                        const row = tableBody.insertRow();
+
+                        const cellId = row.insertCell(0);
+                        const cellNome = row.insertCell(1);
+                        const cellPreco = row.insertCell(2);
+
+                        cellId.textContent = produto.id;
+                        cellNome.textContent = produto.nome;
+                        cellPreco.textContent = produto.preco;
+
+                        totalProdutos++;
+                    });
+
+                    document.getElementById('totalProdutos').textContent =
+                        'Total de Produtos: ' + totalProdutos;
+
+                })
+                .catch(error => {
+
+                    console.error('Erro ao buscar produtos: ', error);
+                    const erroDiv = document.getElementById('erroMensagem');
+                    erroDiv.style.display = 'block';
+                    erroDiv.textContent = 'Erro ao carregar produtos';
+
+                });
+
+        }
+
+        document.addEventListener('DOMContentLoaded', listarProdutos);
+
+    </script>
+
+</body>
+
+</html>

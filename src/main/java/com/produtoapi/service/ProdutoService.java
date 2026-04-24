@@ -60,5 +60,14 @@ public class ProdutoService {
 		return produtorepository.findById(id);
 
 	}
+	
+	
+	public List<Produto> salvarLista (List<Produto> produto){
+		
+		
+		return produtorepository.saveAll(produto);
+		
+	}
+	
 
 }
