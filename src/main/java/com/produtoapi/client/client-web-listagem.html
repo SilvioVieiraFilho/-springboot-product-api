@@ -2,85 +2,288 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Produtos</title>
+<meta charset="UTF-8">
+<title>Cadastro de Produtos</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+/* TITULOS */
+h2 {
+    margin-top: 30px;
+}
+
+/* FORMULÁRIO */
+.form-container {
+    width: 420px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+input {
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* BOTÕES */
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button {
+    padding: 7px 12px;
+    cursor: pointer;
+}
+
+/* TABELA */
+table {
+    border-collapse: collapse;
+    width: 650px;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+#btnSalvar:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+</style>
+
 </head>
 
 <body>
 
-    <h2>Lista de Produtos - HTML/Javascript</h2>
+<h2>Cadastro de Produtos</h2>
 
-    <table id="ProdutosTable" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Preço</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+<div class="form-container">
 
-    <div id="erroMensagem" style="color: red; display: none;"></div>
-    <div id="totalProdutos">Total de produtos: 0</div>
+<input type="hidden" id="id">
 
-    <script>
+<div class="form-group">
+    <label>Nome:</label>
+    <input type="text" id="nome">
+</div>
 
-        function listarProdutos() {
+<div class="form-group">
+    <label>Preço:</label>
+    <input type="number" id="preco">
+</div>
 
-            fetch('http://localhost:8080/produto')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro na rede ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
+<div class="form-group">
+    <label>Quantidade:</label>
+    <input type="number" id="quantidade">
+</div>
 
-                    const tableBody = document
-                        .getElementById('ProdutosTable')
-                        .getElementsByTagName('tbody')[0];
+<div class="form-group">
+    <label>Status:</label>
+    <input type="text" id="status">
+</div>
 
-                    tableBody.innerHTML = ""; // limpa tabela
+<div class="buttons">
+    <button id="btnSalvar" onclick="salvarProduto()">Salvar</button>
+    <button onclick="atualizarProduto()">Atualizar</button>
+    <button onclick="limparCampos()">Limpar</button>
+</div>
 
-                    let totalProdutos = 0;
+</div>
 
-                    data.forEach(produto => {
+<hr>
 
-                        const row = tableBody.insertRow();
+<h2>Lista de Produtos</h2>
 
-                        const cellId = row.insertCell(0);
-                        const cellNome = row.insertCell(1);
-                        const cellPreco = row.insertCell(2);
+<table id="ProdutosTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-                        cellId.textContent = produto.id;
-                        cellNome.textContent = produto.nome;
-                        cellPreco.textContent = produto.preco;
+<div id="totalProdutos">Total de produtos: 0</div>
 
-                        totalProdutos++;
-                    });
+<script>
 
-                    document.getElementById('totalProdutos').textContent =
-                        'Total de Produtos: ' + totalProdutos;
+const URL = "http://localhost:8080/produto";
 
-                })
-                .catch(error => {
+/* =========================
+   CONTROLE BOTÃO SALVAR
+========================= */
 
-                    console.error('Erro ao buscar produtos: ', error);
-                    const erroDiv = document.getElementById('erroMensagem');
-                    erroDiv.style.display = 'block';
-                    erroDiv.textContent = 'Erro ao carregar produtos';
+function bloquearSalvar() {
+    document.getElementById("btnSalvar").disabled = true;
+}
 
-                });
+function liberarSalvar() {
+    document.getElementById("btnSalvar").disabled = false;
+}
 
-        }
+/* =========================
+   LISTAR
+========================= */
 
-        document.addEventListener('DOMContentLoaded', listarProdutos);
+function listarProdutos() {
 
-    </script>
+    fetch(URL)
+        .then(res => res.json())
+        .then(data => {
+
+            const tableBody = document.querySelector("#ProdutosTable tbody");
+            tableBody.innerHTML = "";
+
+            let total = 0;
+
+            data.forEach(produto => {
+
+                const row = tableBody.insertRow();
+
+                row.insertCell(0).textContent = produto.id;
+                row.insertCell(1).textContent = produto.nome;
+                row.insertCell(2).textContent = produto.preco;
+
+                const cellAcoes = row.insertCell(3);
+
+                const btnEditar = document.createElement("button");
+                btnEditar.textContent = "Editar";
+                btnEditar.onclick = () => carregarProduto(produto);
+
+                const btnExcluir = document.createElement("button");
+                btnExcluir.textContent = "Excluir";
+                btnExcluir.onclick = () => deletarProduto(produto.id);
+
+                cellAcoes.appendChild(btnEditar);
+                cellAcoes.appendChild(btnExcluir);
+
+                total++;
+            });
+
+            document.getElementById("totalProdutos").textContent =
+                "Total de produtos: " + total;
+
+        })
+        .catch(err => console.error(err));
+}
+
+/* =========================
+   SALVAR (POST)
+========================= */
+
+function salvarProduto() {
+
+    const produto = {
+        nome: document.getElementById("nome").value,
+        preco: document.getElementById("preco").value,
+        quantidade: document.getElementById("quantidade").value,
+        status: document.getElementById("status").value
+    };
+
+    fetch(URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(produto)
+    })
+    .then(() => {
+        listarProdutos();
+        limparCampos();
+    });
+}
+
+/* =========================
+   ATUALIZAR (PUT)
+========================= */
+
+function atualizarProduto() {
+
+    const id = document.getElementById("id").value;
+
+    const produto = {
+        nome: document.getElementById("nome").value,
+        preco: document.getElementById("preco").value,
+        quantidade: document.getElementById("quantidade").value,
+        status: document.getElementById("status").value
+    };
+
+    fetch(`${URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(produto)
+    })
+    .then(() => {
+        listarProdutos();
+        limparCampos();
+        liberarSalvar(); // desbloqueia salvar
+    });
+}
+
+/* =========================
+   DELETE
+========================= */
+
+function deletarProduto(id) {
+
+    fetch(`${URL}/${id}`, {
+        method: "DELETE"
+    })
+    .then(() => listarProdutos());
+}
+
+/* =========================
+   EDITAR
+========================= */
+
+function carregarProduto(produto) {
+
+    document.getElementById("id").value = produto.id;
+    document.getElementById("nome").value = produto.nome;
+    document.getElementById("preco").value = produto.preco;
+    document.getElementById("quantidade").value = produto.quantidade;
+    document.getElementById("status").value = produto.status;
+
+    bloquearSalvar(); // bloqueia ao editar
+}
+
+/* =========================
+   LIMPAR
+========================= */
+
+function limparCampos() {
+
+    document.getElementById("id").value = "";
+    document.getElementById("nome").value = "";
+    document.getElementById("preco").value = "";
+    document.getElementById("quantidade").value = "";
+    document.getElementById("status").value = "";
+
+    liberarSalvar(); // volta ao normal
+}
+
+document.addEventListener("DOMContentLoaded", listarProdutos);
+
+</script>
 
 </body>
-
 </html>

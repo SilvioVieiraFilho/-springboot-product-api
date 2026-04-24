@@ -1,74 +1,64 @@
 package com.produtoapi.controller;
 
-import java.lang.foreign.Linker.Option;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.produtoapi.model.Produto;
+import com.produtoapi.dto.ProdutoRequestDTO;
+import com.produtoapi.dto.ProdutoResponseDTO;
 import com.produtoapi.service.ProdutoService;
+
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/produto")
-
 public class ProdutoController {
 
-	@Autowired
-	ProdutoService serviceProduto;
+    @Autowired
+    private ProdutoService serviceProduto;
 
-	@GetMapping
-	public List<Produto> listarTodos() {
+    // LISTAR
+    @GetMapping
+    public List<ProdutoResponseDTO> listarTodos() {
+        return serviceProduto.listarTodos();
+    }
 
-		return serviceProduto.listarTodos();
+    // SALVAR
+    @PostMapping
+    public ProdutoResponseDTO salvarProduto(@RequestBody ProdutoRequestDTO dto) {
+        return serviceProduto.salvar(dto);
+    }
 
-	}
+    // DELETAR
+    @DeleteMapping("/{id}")
+    public void deletarProduto(@PathVariable Long id) {
+        serviceProduto.deletarProduto(id);
+    }
+    
+    
+    @GetMapping("/{id}")
+    public ProdutoResponseDTO buscarProdutoPorId(@PathVariable Long id) {
+        return serviceProduto.buscarPorId(id);
+    }
 
-	@PostMapping
+    // ATUALIZAR
+    @PutMapping("/{id}")
+    public ProdutoResponseDTO atualizarProduto(@PathVariable Long id,
+                                               @RequestBody ProdutoRequestDTO dto) {
+        return serviceProduto.update(id, dto);
+    }
 
-	public Produto salvarProduto(@RequestBody Produto produto) {
-
-		return serviceProduto.salvar(produto);
-	}
-
-	@DeleteMapping("/{id}")
-	public void deletarProduto(@PathVariable Long id) {
-
-		serviceProduto.deletarProduto(id);
-
-	}
-
-	@PutMapping("/{id}")
-
-	public Produto updataProduto(@PathVariable Long id, @RequestBody Produto produto) {
-
-		return serviceProduto.update(id, produto);
-
-	}
-
-	@GetMapping("/{id}")
-
-	public Optional<Produto> buscarProdutoPorId(@PathVariable Long id) {
-
-		return serviceProduto.encontraumid(id);
-
-	}
-	
-	@PostMapping("/salvarLista")
-	
-	public List<Produto> salvarLista(@RequestBody List<Produto> produto){
-		
-	return serviceProduto.salvarLista(produto);
-	}
+    @PostMapping("/salvarLista")
+    
+    
+   public List <ProdutoResponseDTO> salvarLista(@Valid @RequestBody List <ProdutoRequestDTO> dto) {
+    	
+    	
+    	return serviceProduto.salvarLista(dto);
+    	
+    	
+    }
 
 }
