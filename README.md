@@ -81,4 +81,25 @@ A interface consome a API Spring Boot utilizando requisições HTTP:
 
 A interface foi criada apenas para fins de estudo, com foco em praticar integração frontend + backend.
 
+
+---
+
+## 📄 Documentação da API (Swagger)
+
+O projeto utiliza **Swagger (Springdoc OpenAPI)** para documentação e testes dos endpoints da API de forma interativa.
+
+### 🌐 Acesso ao Swagger
+
+Após iniciar a aplicação, acesse: http://localhost:8080/swagger-ui/index.html
+### 🚀 Funcionalidades do Swagger
+
+- 📌 Visualização de todos os endpoints da API  
+- 🧪 Teste das requisições diretamente pelo navegador  
+- 📄 Documentação automática dos controllers  
+- 🔎 Visualização de Request e Response models
+
+
+
+
+
 ## 📦 Estrutura do projeto
