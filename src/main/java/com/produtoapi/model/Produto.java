@@ -1,6 +1,10 @@
 package com.produtoapi.model;
 
+import com.produtoapi.enums.ProdutoStatus;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +28,8 @@ public class Produto {
 	private String nome;
 	private int quantidade;
 	private double preco;
-	private String status;
+    @Enumerated(EnumType.STRING)
+    private ProdutoStatus status;
 
 
 public void setId(Long id) {

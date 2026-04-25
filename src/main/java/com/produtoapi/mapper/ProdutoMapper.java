@@ -11,17 +11,12 @@ import com.produtoapi.model.Produto;
 @Mapper(componentModel  = "spring")
 
 public interface ProdutoMapper {
-	
-	
-	ProdutoMapper INSTANCE = org.mapstruct.factory.Mappers.getMapper(ProdutoMapper.class);
 
-	
-	Produto toEntity(ProdutoRequestDTO dto);
-	
-	ProdutoResponseDTO  toDTO(Produto produto);
-	
+    Produto toEntity(ProdutoRequestDTO dto);
+
+    ProdutoResponseDTO toDTO(Produto produto);
+
     List<Produto> toEntityList(List<ProdutoRequestDTO> dtoList);
 
     List<ProdutoResponseDTO> toDTOList(List<Produto> entityList);
-	
 }

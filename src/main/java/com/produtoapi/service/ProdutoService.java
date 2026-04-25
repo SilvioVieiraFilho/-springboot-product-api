@@ -3,21 +3,21 @@ package com.produtoapi.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.produtoapi.specification.ProdutoSpecification;
 
 import javax.management.RuntimeErrorException;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.produtoapi.dto.ProdutoRequestDTO;
 import com.produtoapi.dto.ProdutoResponseDTO;
+import com.produtoapi.enums.ProdutoStatus;
 import com.produtoapi.mapper.ProdutoMapper;
 import com.produtoapi.model.*;
 import com.produtoapi.repository.ProdutoRepository;
 
 import tools.jackson.databind.ext.jdk8.Jdk8OptionalSerializer;
-
 
 @Service
 public class ProdutoService {
@@ -29,19 +29,17 @@ public class ProdutoService {
 
 	public List<ProdutoResponseDTO> listarTodos() {
 
-		return produtorepository.findAll().stream().map(mapper ::toDTO).collect(Collectors.toList());
+		return produtorepository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
 
 	}
 
-	public ProdutoResponseDTO  salvar(ProdutoRequestDTO dto) {
+	public ProdutoResponseDTO salvar(ProdutoRequestDTO dto) {
 
-		   Produto produto = mapper.toEntity(dto);
-		    Produto salvo = produtorepository.save(produto);
+		Produto produto = mapper.toEntity(dto);
+		Produto salvo = produtorepository.save(produto);
 
-		   
-		    return mapper.toDTO(salvo);
+		return mapper.toDTO(salvo);
 
-		   
 	}
 
 	public void deletarProduto(Long id) {
@@ -52,45 +50,52 @@ public class ProdutoService {
 
 	public ProdutoResponseDTO update(Long id, ProdutoRequestDTO dto) {
 
-	    Optional<Produto> produtoExistente = produtorepository.findById(id);
+		Optional<Produto> produtoExistente = produtorepository.findById(id);
 
-	    if (produtoExistente.isPresent()) {
+		if (produtoExistente.isPresent()) {
 
-	        Produto p = produtoExistente.get();
+			Produto p = produtoExistente.get();
 
-	        // atualiza os dados com base no DTO
-	        p.setNome(dto.getNome());
-	        p.setQuantidade(dto.getQuantidade());
-	        p.setPreco(dto.getPreco());
-	        p.setStatus(dto.getStatus());
+			// atualiza os dados com base no DTO
+			p.setNome(dto.getNome());
+			p.setQuantidade(dto.getQuantidade());
+			p.setPreco(dto.getPreco());
+			p.setStatus(dto.getStatus());
 
-	        Produto atualizado = produtorepository.save(p);
+			Produto atualizado = produtorepository.save(p);
 
-	        // converte para DTO de resposta
-	        return mapper.toDTO(atualizado);
+			// converte para DTO de resposta
+			return mapper.toDTO(atualizado);
 
-	    } else {
-	        throw new RuntimeException("Produto não encontrado");
-	    }
+		} else {
+			throw new RuntimeException("Produto não encontrado");
+		}
 	}
+
 	public ProdutoResponseDTO buscarPorId(Long id) {
 
-	    Produto produto = produtorepository.findById(id)
-	            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+		Produto produto = produtorepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-	    return mapper.toDTO(produto);
+		return mapper.toDTO(produto);
 	}
-	
-	
-	public List<ProdutoResponseDTO> salvarLista (List<ProdutoRequestDTO> listaDTO){
-		
-		
-		 List <Produto> lista = mapper.toEntityList(listaDTO);
-		   List <Produto> salvo = produtorepository.saveAll(lista);
-		
+
+	public List<ProdutoResponseDTO> salvarLista(List<ProdutoRequestDTO> listaDTO) {
+
+		List<Produto> lista = mapper.toEntityList(listaDTO);
+		List<Produto> salvo = produtorepository.saveAll(lista);
+
 		return mapper.toDTOList(salvo);
-		
-	}
-	
 
+	}
+
+	public List<ProdutoResponseDTO> buscarFiltro(String nome, ProdutoStatus status, Double preco) {
+		List<Produto> produtos = produtorepository.findAll(ProdutoSpecification.nome(nome).and(ProdutoSpecification
+				.status(status).and(ProdutoSpecification.minPreco(preco).and(ProdutoSpecification.maxPreco(preco))))
+
+		);
+
+		return produtos.stream().map(mapper::toDTO).toList();
+
+	}
 }
