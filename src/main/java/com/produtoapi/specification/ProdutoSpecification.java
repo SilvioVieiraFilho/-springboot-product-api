@@ -24,14 +24,22 @@ public class ProdutoSpecification {
 		};
 	}
 
-	public static Specification<Produto> maxPreco(Double max) {
-		return (root, query, cb) -> max == null ? null : cb.lessThanOrEqualTo(root.get("preco"), max);
-
+	public static Specification<Produto> minPreco(Double precoMin) {
+	    return (root, query, cb) -> {
+	        if (precoMin == null) {
+	            return null;
+	        }
+	        return cb.greaterThanOrEqualTo(root.get("preco"), precoMin);
+	    };
 	}
 
-	public static Specification<Produto> minPreco(Double min) {
-		return (root, query, cb) -> min == null ? null : cb.greaterThanOrEqualTo(root.get("preco"), min);
-
+	public static Specification<Produto> maxPreco(Double precoMax) {
+	    return (root, query, cb) -> {
+	        if (precoMax == null) {
+	            return null;
+	        }
+	        return cb.lessThanOrEqualTo(root.get("preco"), precoMax);
+	    };
 	}
 
 }

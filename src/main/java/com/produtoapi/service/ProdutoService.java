@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.produtoapi.dto.ProdutoRequestDTO;
 import com.produtoapi.dto.ProdutoResponseDTO;
 import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.exception.BusinessException;
+import com.produtoapi.exception.ProdutoNotFoundExcepetion;
 import com.produtoapi.mapper.ProdutoMapper;
 import com.produtoapi.model.*;
 import com.produtoapi.repository.ProdutoRepository;
@@ -44,11 +46,13 @@ public class ProdutoService {
 
 	public void deletarProduto(Long id) {
 
-		produtorepository.deleteById(id);
+		 Produto produto = produtorepository.findById(id)
+			        .orElseThrow(() -> new ProdutoNotFoundExcepetion(id));
 
+			    produtorepository.delete(produto);
 	}
 
-	public ProdutoResponseDTO update(Long id, ProdutoRequestDTO dto) {
+	public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO dto) {
 
 		Optional<Produto> produtoExistente = produtorepository.findById(id);
 
@@ -68,14 +72,13 @@ public class ProdutoService {
 			return mapper.toDTO(atualizado);
 
 		} else {
-			throw new RuntimeException("Produto não encontrado");
+			throw new ProdutoNotFoundExcepetion(id);
 		}
 	}
 
 	public ProdutoResponseDTO buscarPorId(Long id) {
 
-		Produto produto = produtorepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+		Produto produto = produtorepository.findById(id).orElseThrow(() -> new ProdutoNotFoundExcepetion(id));
 
 		return mapper.toDTO(produto);
 	}
@@ -89,13 +92,35 @@ public class ProdutoService {
 
 	}
 
-	public List<ProdutoResponseDTO> buscarFiltro(String nome, ProdutoStatus status, Double preco) {
-		List<Produto> produtos = produtorepository.findAll(ProdutoSpecification.nome(nome).and(ProdutoSpecification
-				.status(status).and(ProdutoSpecification.minPreco(preco).and(ProdutoSpecification.maxPreco(preco))))
+	public List<ProdutoResponseDTO> buscarFiltro(String nome, ProdutoStatus status,  Double precoMin, Double precoMax) {
 
-		);
+		if (nome == null && status == null && precoMax == null && precoMin == null) {
 
-		return produtos.stream().map(mapper::toDTO).toList();
+			throw new BusinessException("Informe pelo menos um filtro para a busca");
 
+		}
+
+		try {
+
+			List<Produto> produtos = produtorepository.findAll(ProdutoSpecification.nome(nome).and(ProdutoSpecification
+					.status(status)
+					.and(ProdutoSpecification.minPreco(precoMin)
+					.and(ProdutoSpecification.maxPreco(precoMax))))
+
+			);
+
+			if (produtos.isEmpty()) {
+
+				throw new BusinessException("nenhum produto encontrado com os filtros que foram informados");
+			}
+
+			return produtos.stream().map(mapper::toDTO).toList();
+
+		} catch (Exception e) {
+
+			throw new RuntimeException("Erro ao buscar produtos", e);
+
+		}
 	}
+
 }
