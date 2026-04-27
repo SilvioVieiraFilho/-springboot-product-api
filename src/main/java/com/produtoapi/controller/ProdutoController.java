@@ -15,7 +15,6 @@ import com.produtoapi.dto.ProdutoResponseDTO;
 import com.produtoapi.enums.ProdutoStatus;
 import com.produtoapi.service.ProdutoService;
 
-
 import jakarta.validation.Valid;
 import response.ApiResponse;
 
@@ -32,47 +31,44 @@ public class ProdutoController {
 	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> listarTodos() {
 
 		List<ProdutoResponseDTO> produto = serviceProduto.listarTodos();
-		
+
 		ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<>("Produtos listado com sucesso", produto);
-		
+
 		return ResponseEntity.ok(response);
 	}
 
 	// SALVAR
 	@PostMapping
-	
 
 	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> salvarProduto(@RequestBody ProdutoRequestDTO dto) {
 
-	    ProdutoResponseDTO produto = serviceProduto.salvar(dto);
+		ProdutoResponseDTO produto = serviceProduto.salvar(dto);
 
-	    ApiResponse<ProdutoResponseDTO> response =
-	            new ApiResponse<>("Produto cadastrado com sucesso", produto);
+		ApiResponse<ProdutoResponseDTO> response = new ApiResponse<>("Produto cadastrado com sucesso", produto);
 
-	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
-	
 
 	// DELETAR
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse<Void>> deletarProduto(@PathVariable Long id) {
 
-	    serviceProduto.deletarProduto(id);
+		serviceProduto.deletarProduto(id);
 
-	    ApiResponse<Void> response =
-	            new ApiResponse<>("Produto deletado com sucesso", null);
+		ApiResponse<Void> response = new ApiResponse<>("Produto deletado com sucesso", null);
 
-	    return ResponseEntity.ok(response);
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{id}")
-	public  ResponseEntity<ApiResponse<ProdutoResponseDTO>> buscarProdutoPorId(@PathVariable Long id) {
+	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> buscarProdutoPorId(@PathVariable Long id) {
 
 		ProdutoResponseDTO produto = serviceProduto.buscarPorId(id);
-		
-		ApiResponse<ProdutoResponseDTO> response = new ApiResponse<>("Sua busca por id foi requisitada com sucesso",produto);
-		
-	 return ResponseEntity.ok(response);
+
+		ApiResponse<ProdutoResponseDTO> response = new ApiResponse<>("Sua busca por id foi requisitada com sucesso",
+				produto);
+
+		return ResponseEntity.ok(response);
 	}
 
 	// ATUALIZAR
@@ -87,25 +83,26 @@ public class ProdutoController {
 
 	@PostMapping("/salvarLista")
 
-	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> salvarLista(@Valid @RequestBody List<ProdutoRequestDTO> dto) {
+	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> salvarLista(
+			@Valid @RequestBody List<ProdutoRequestDTO> dto) {
 
-		 List <ProdutoResponseDTO> produtos = serviceProduto.salvarLista(dto);
-		 ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<>("Produtos criados com sucesso!",produtos); 
-		
+		List<ProdutoResponseDTO> produtos = serviceProduto.salvarLista(dto);
+		ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<>("Produtos criados com sucesso!", produtos);
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
 	}
 
 	@GetMapping("/filtro")
 
-	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> buscarFiltro(@RequestParam(required = false) String nome,
-			@RequestParam(required = false) ProdutoStatus status, @RequestParam(required = false) Double precoMin,
-			@RequestParam(required = false) Double precoMax) {
-		
-		List<ProdutoResponseDTO> produtos = serviceProduto.buscarFiltro(nome, status, precoMax, precoMin);
-		ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<List<ProdutoResponseDTO>>("Filtro realizado com sucesso", produtos);
-		
+	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> buscarFiltro(
+			@RequestParam(required = false) String nome, @RequestParam(required = false) ProdutoStatus status,
+			@RequestParam(required = false) Double precoMin, @RequestParam(required = false) Double precoMax) {
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		List<ProdutoResponseDTO> produtos = serviceProduto.buscarFiltro(nome, status, precoMax, precoMin);
+		ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<List<ProdutoResponseDTO>>(
+				"Filtro realizado com sucesso", produtos);
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 }
