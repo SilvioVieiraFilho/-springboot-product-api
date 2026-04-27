@@ -1,105 +1,121 @@
-# 🚀 Product API - Spring Boot
+🚀 Spring Boot Product API
 
-API REST para gerenciamento de produtos desenvolvida com Spring Boot, aplicando arquitetura em camadas e boas práticas de desenvolvimento backend.
+API REST desenvolvida com Java + Spring Boot, focada em boas práticas de desenvolvimento backend, organização de código e tratamento estruturado de respostas e erros.
 
----
+📌 Objetivo do Projeto
 
-## 🛠️ Tecnologias utilizadas
+Este projeto tem como objetivo praticar e demonstrar conhecimentos em:
 
-- Java 21  
-- Spring Boot  
-- Spring Data JPA  
-- Hibernate  
-- Lombok  
-- Maven  
-- SQLite  
+Desenvolvimento de APIs REST com Spring Boot
+Uso de DTOs para desacoplamento de entidades
+Tratamento global de exceções
+Padronização de responses da API
+Organização de código em camadas
+Boas práticas de versionamento e estrutura de projeto
+🛠️ Tecnologias Utilizadas
+Java 17+
+Spring Boot
+Spring Web
+Spring Data JPA
+Hibernate
+Banco de dados (H2 / MySQL / SQLite – conforme configuração)
+Maven
 
----
+🧠 Principais Conceitos Aplicados
+✔ Arquitetura em Camadas
 
-## 📌 Funcionalidades
+Separação clara entre:
 
-- ✅ Cadastro de produtos  
-- ✅ Listagem de produtos  
-- ✅ Atualização de produtos  
-- ✅ Remoção de produtos  
-- ✅ Separação em camadas com DTOs  
-- ✅ Uso de Request e Response objects  
-- ✅ Mapeamento com Mapper  
+Controller
+Service
+Repository
+DTOs
+✔ Uso de DTO (Data Transfer Object)
 
----
+Evita exposição direta das entidades, garantindo:
 
-## 🧱 Arquitetura do projeto
+Segurança dos dados
+Melhor controle de entrada e saída
+Código mais limpo e desacoplado
 
-O projeto segue uma arquitetura em camadas baseada no padrão **MVC + DTO Pattern**:
+✔ Tratamento Global de Erros
 
-- **Model (Entity)** → Representa a tabela `Produto` no banco  
-- **Repository** → Interface de acesso ao banco de dados (JPA)  
-- **Service** → Regras de negócio da aplicação  
-- **Controller** → Exposição dos endpoints REST  
-- **DTO (Data Transfer Object)** → Transporte de dados entre camadas  
-- **Request / Response** → Organização de entrada e saída da API  
-- **Mapper** → Conversão entre Entity ⇄ DTO  
+Implementação de respostas padronizadas para erros da API:
 
----
+Erros de validação
+Recurso não encontrado
+Erros internos
 
----
+Exemplo de resposta:
 
-## 🎨 Interface Web (HTML + JavaScript)
+{
+  "timestamp": "2026-04-27T10:30:00",
+  "status": 404,
+  "error": "Produto não encontrado",
+  "message": "ID informado não existe na base"
+}
+✔ Padronização de Responses
 
-O projeto também conta com uma interface simples desenvolvida com **HTML, CSS e JavaScript puro**, permitindo interagir com a API de forma visual.
+Todas as respostas seguem um padrão estruturado:
 
-### 💡 Funcionalidades da tela
+{
+  "message": "Operação realizada com sucesso",
+  "data": {
+    "id": 1,
+    "nome": "Produto X",
+    "preco": 50.0
+  }
+}
+📦 Funcionalidades da API
+Criar produto
+Buscar produto por ID
+Listar produtos
+Atualizar produto
+Remover produto
+📁 Estrutura do Projeto
+src/main/java
+ └── com.seuprojeto
+      ├── controller
+      ├── service
+      ├── repository
+      ├── dto
+      ├── model
+      ├── exception
+      └── config
+🚫 Swagger
 
-- 🟢 Cadastro de produtos via formulário  
-- 📋 Listagem de produtos em tabela  
-- ✏️ Edição de produtos  
-- 🗑️ Remoção de produtos  
-- 🔄 Consumo da API REST via `fetch`
+O Swagger foi removido propositalmente para manter o foco em:
 
----
+Organização manual da API
+Controle total das responses
+Prática de documentação via README
 
-### 🖥️ Tecnologias da interface
+📌 Boas Práticas Aplicadas
+Código limpo (Clean Code)
+Separação de responsabilidades (SOLID básico)
+Uso de camadas bem definidas
+Padronização de respostas
+Tratamento global de exceções
+Evitar exposição de entidades diretamente
 
-- HTML5  
-- CSS3  
-- JavaScript (Fetch API)
+📈 Diferencial do Projeto
 
----
+Este projeto demonstra evolução em direção a um perfil backend profissional, com foco em:
 
-### 🔗 Integração com a API
+Estrutura escalável
+Código preparado para produção
+Pensamento de arquitetura
+Boas práticas reais de mercado
 
-A interface consome a API Spring Boot utilizando requisições HTTP:
+👨‍💻 Autor
 
-- `GET /produtos` → listar produtos  
-- `POST /produtos` → criar produto  
-- `PUT /produtos/{id}` → atualizar produto  
-- `DELETE /produtos/{id}` → remover produto  
+Desenvolvido por Silvio Rodrigues Vieira Filho
 
----
-
-### 🚀 Observação
-
-A interface foi criada apenas para fins de estudo, com foco em praticar integração frontend + backend.
-
-
----
-
-## 📄 Documentação da API (Swagger)
-
-O projeto utiliza **Swagger (Springdoc OpenAPI)** para documentação e testes dos endpoints da API de forma interativa.
-
-### 🌐 Acesso ao Swagger
-
-Após iniciar a aplicação, acesse: http://localhost:8080/swagger-ui/index.html
-### 🚀 Funcionalidades do Swagger
-
-- 📌 Visualização de todos os endpoints da API  
-- 🧪 Teste das requisições diretamente pelo navegador  
-- 📄 Documentação automática dos controllers  
-- 🔎 Visualização de Request e Response models
+📌 Projeto de estudo e evolução contínua em Java Backend
 
 
 
 
+Desenvolvido por Silvio
 
-## 📦 Estrutura do projeto
+📌 Projeto de estudo e evolução contínua em Java Backend
