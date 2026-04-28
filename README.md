@@ -1,121 +1,165 @@
-🚀 Spring Boot Product API
 
-API REST desenvolvida com Java + Spring Boot, focada em boas práticas de desenvolvimento backend, organização de código e tratamento estruturado de respostas e erros.
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d6efd,100:6610f2&height=180&section=header&text=Spring%20Boot%20Product%20API&fontSize=28&fontColor=ffffff" />
+</p>
 
-📌 Objetivo do Projeto
+# 🚀 Spring Boot Product API
+
+API REST desenvolvida com Java + Spring Boot, focada em boas práticas de desenvolvimento backend, arquitetura em camadas, testes unitários e qualidade de código.
+
+---
+
+# 🏷️ Tecnologias Utilizadas
+
+![Java](https://img.shields.io/badge/Java-17%2B-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Framework-brightgreen)
+![JUnit](https://img.shields.io/badge/Tests-JUnit5-red)
+![Mockito](https://img.shields.io/badge/Mock-Mockito-blue)
+![Coverage](https://img.shields.io/badge/Coverage-JaCoCo-yellow)
+![Maven](https://img.shields.io/badge/Maven-Build-orange)
+
+---
+
+# 📌 Objetivo do Projeto
 
 Este projeto tem como objetivo praticar e demonstrar conhecimentos em:
 
-Desenvolvimento de APIs REST com Spring Boot
-Uso de DTOs para desacoplamento de entidades
-Tratamento global de exceções
-Padronização de responses da API
-Organização de código em camadas
-Boas práticas de versionamento e estrutura de projeto
-🛠️ Tecnologias Utilizadas
-Java 17+
-Spring Boot
-Spring Web
-Spring Data JPA
-Hibernate
-Banco de dados (H2 / MySQL / SQLite – conforme configuração)
-Maven
+- Desenvolvimento de APIs REST com Spring Boot  
+- Arquitetura em camadas (Controller, Service, Repository)  
+- Uso de DTOs para desacoplamento de entidades  
+- Validação de dados com Bean Validation  
+- Tratamento global de exceções  
+- Regras de negócio na camada de serviço  
+- Testes unitários com JUnit e Mockito  
+- Filtros dinâmicos com Specification  
+- Cobertura de testes com JaCoCo  
 
-🧠 Principais Conceitos Aplicados
-✔ Arquitetura em Camadas
+---
 
-Separação clara entre:
+# 🧠 Arquitetura
 
-Controller
-Service
-Repository
-DTOs
-✔ Uso de DTO (Data Transfer Object)
+O projeto segue arquitetura em camadas:
 
-Evita exposição direta das entidades, garantindo:
+**Controller → Service → Repository**
 
-Segurança dos dados
-Melhor controle de entrada e saída
-Código mais limpo e desacoplado
+Com separação clara de responsabilidades e uso de DTOs para comunicação segura entre camadas.
 
-✔ Tratamento Global de Erros
+---
 
-Implementação de respostas padronizadas para erros da API:
+# 🛠️ Tecnologias Utilizadas
 
-Erros de validação
-Recurso não encontrado
-Erros internos
+- Java 17+ / 21  
+- Spring Boot  
+- Spring Web  
+- Spring Data JPA  
+- Hibernate  
+- SQLite (banco local)  
+- Maven  
+- JUnit 5  
+- Mockito  
+- MapStruct  
+- JaCoCo  
 
-Exemplo de resposta:
+---
 
+# 🧪 Qualidade de Código
+
+- Testes unitários com JUnit 5 + Mockito  
+- Cobertura de testes com JaCoCo  
+- Tratamento global de exceções  
+- Validações com Bean Validation  
+- Código baseado em Clean Code  
+
+---
+
+# 📦 Funcionalidades da API
+
+- Criar produto  
+- Buscar por ID  
+- Listar produtos  
+- Atualizar produto  
+- Remover produto  
+- Buscar com filtros dinâmicos  
+- Merge de produtos (regra de negócio de quantidade)  
+
+---
+
+# 🔍 Regras de Negócio
+
+- Se um produto já existir (mesmo nome, preço e status), sua quantidade é somada ao invés de criar um novo registro.
+
+---
+
+# 📊 Tratamento de Erros
+
+```json
 {
   "timestamp": "2026-04-27T10:30:00",
   "status": 404,
   "error": "Produto não encontrado",
   "message": "ID informado não existe na base"
 }
-✔ Padronização de Responses
+````
 
-Todas as respostas seguem um padrão estruturado:
+---
 
-{
-  "message": "Operação realizada com sucesso",
-  "data": {
-    "id": 1,
-    "nome": "Produto X",
-    "preco": 50.0
-  }
-}
-📦 Funcionalidades da API
-Criar produto
-Buscar produto por ID
-Listar produtos
-Atualizar produto
-Remover produto
-📁 Estrutura do Projeto
+# 📁 Estrutura do Projeto
+
+```
 src/main/java
- └── com.seuprojeto
-      ├── controller
-      ├── service
-      ├── repository
-      ├── dto
-      ├── model
-      ├── exception
-      └── config
-🚫 Swagger
+└── com.produtoapi
+    ├── controller
+    ├── service
+    ├── repository
+    ├── dto
+    ├── model
+    ├── mapper
+    ├── specification
+    └── exception
+```
 
-O Swagger foi removido propositalmente para manter o foco em:
+---
 
-Organização manual da API
-Controle total das responses
-Prática de documentação via README
+# 🎯 Decisões de Arquitetura
 
-📌 Boas Práticas Aplicadas
-Código limpo (Clean Code)
-Separação de responsabilidades (SOLID básico)
-Uso de camadas bem definidas
-Padronização de respostas
-Tratamento global de exceções
-Evitar exposição de entidades diretamente
+* Swagger removido para prática manual de responses
+* DTOs usados para desacoplamento total da entidade
+* Merge de produtos implementado como regra de negócio real
+* Foco em testes unitários ao invés de apenas CRUD básico
 
-📈 Diferencial do Projeto
+---
 
-Este projeto demonstra evolução em direção a um perfil backend profissional, com foco em:
+# 📈 Evolução do Projeto
 
-Estrutura escalável
-Código preparado para produção
-Pensamento de arquitetura
-Boas práticas reais de mercado
+Este projeto evoluiu para nível profissional com:
 
-👨‍💻 Autor
+* Regras de negócio reais
+* Testes automatizados
+* Filtros dinâmicos (Specification)
+* Estrutura escalável
+* Cobertura de testes validada
 
-Desenvolvido por Silvio Rodrigues Vieira Filho
+---
+
+# ▶️ Como Executar o Projeto
+
+```bash
+git clone https://github.com/SEU-USUARIO/springboot-product-api.git
+
+cd springboot-product-api
+
+./mvnw spring-boot:run
+```
+
+---
+
+# 👨‍💻 Autor
+
+**Silvio Rodrigues Vieira Filho**
 
 📌 Projeto de estudo e evolução contínua em Java Backend
 
 
 
-
-Desenvolvido por Silvio
-
-📌 Projeto de estudo e evolução contínua em Java Backend
+Só me fala 👍
+```
