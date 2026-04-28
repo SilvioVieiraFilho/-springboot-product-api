@@ -52,14 +52,13 @@ Com separação clara de responsabilidades e uso de DTOs para comunicação segu
 - Spring Boot  
 - Spring Web  
 - Spring Data JPA  
-- Hibernate  
-- SQLite (banco local)  
+- Hibernate   
 - Maven  
 - JUnit 5  
 - Mockito  
 - MapStruct  
 - JaCoCo  
-
+- h2 database(banco local) 
 ---
 
 # 🧪 Qualidade de Código
