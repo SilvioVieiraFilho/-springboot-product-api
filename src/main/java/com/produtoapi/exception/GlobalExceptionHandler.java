@@ -2,6 +2,7 @@ package com.produtoapi.exception;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -43,17 +44,7 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
-
-		Map<String, String> erros = new HashMap<>();
-
-		ex.getBindingResult().getFieldErrors().forEach(error -> {
-			erros.put(error.getField(), error.getDefaultMessage());
-		});
-
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
-	}
+	
 
 	@ExceptionHandler(ProdutoNotFoundExcepetion.class)
 	public ResponseEntity<ErrorResponse> handleNotFound(ProdutoNotFoundExcepetion ex, HttpServletRequest request) {
@@ -62,5 +53,14 @@ public class GlobalExceptionHandler {
 				request.getRequestURI());
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+
+		List<String> erros = ex.getBindingResult().getFieldErrors().stream()
+				.map(e -> e.getField() + ": " + e.getDefaultMessage()).toList();
+
+		return ResponseEntity.badRequest().body(erros);
 	}
 }

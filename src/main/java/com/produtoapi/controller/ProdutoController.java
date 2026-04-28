@@ -40,7 +40,7 @@ public class ProdutoController {
 	// SALVAR
 	@PostMapping
 
-	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> salvarProduto(@RequestBody ProdutoRequestDTO dto) {
+	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> salvarProduto(@Valid @RequestBody ProdutoRequestDTO dto) {
 
 		ProdutoResponseDTO produto = serviceProduto.salvar(dto);
 
@@ -84,11 +84,12 @@ public class ProdutoController {
 	@PostMapping("/salvarLista")
 
 	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> salvarLista(
-			@Valid @RequestBody List<ProdutoRequestDTO> dto) {
+			@Valid @RequestBody List<@Valid ProdutoRequestDTO> dto) {
 
 		List<ProdutoResponseDTO> produtos = serviceProduto.salvarLista(dto);
 		ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<>("Produtos criados com sucesso!", produtos);
 
+		System.out.println(dto.getClass().getName());
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
 	}
