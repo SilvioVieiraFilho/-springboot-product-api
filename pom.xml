@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>3.3.5</version>
         <relativePath/>
     </parent>
 
@@ -38,6 +38,13 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.224</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,7 +57,7 @@
             <artifactId>sqlite-jdbc</artifactId>
         </dependency>
 
-        <!-- Hibernate Dialect -->
+        <!-- Hibernate Dialects -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>
@@ -78,7 +85,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Testes -->
+        <!-- TESTES -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -96,7 +103,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- COMPILER (MapStruct + Lombok) -->
+            <!-- COMPILER -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -122,7 +129,7 @@
                             <version>${lombok.version}</version>
                         </path>
 
-                        <!-- Binding Lombok + MapStruct -->
+                        <!-- Lombok + MapStruct binding -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
@@ -133,7 +140,7 @@
                 </configuration>
             </plugin>
 
-            <!-- JACOCO (COBERTURA DE TESTES) -->
+            <!-- JACOCO -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -141,14 +148,12 @@
 
                 <executions>
 
-                    <!-- ativa agente -->
                     <execution>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
 
-                    <!-- gera relatório -->
                     <execution>
                         <id>report</id>
                         <phase>test</phase>

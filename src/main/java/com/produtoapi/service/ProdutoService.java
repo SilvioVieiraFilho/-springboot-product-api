@@ -20,7 +20,6 @@ import com.produtoapi.mapper.ProdutoMapper;
 import com.produtoapi.model.*;
 import com.produtoapi.repository.ProdutoRepository;
 
-import tools.jackson.databind.ext.jdk8.Jdk8OptionalSerializer;
 
 @Service
 public class ProdutoService {
