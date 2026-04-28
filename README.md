@@ -160,6 +160,3 @@ cd springboot-product-api
 📌 Projeto de estudo e evolução contínua em Java Backend
 
 
-
-Só me fala 👍
-```
