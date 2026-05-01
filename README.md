@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d6efd,100:6610f2&height=180&section=header&text=Spring%20Boot%20Product%20API&fontSize=28&fontColor=ffffff" />
 </p>
@@ -24,15 +23,15 @@ API REST desenvolvida com Java + Spring Boot, focada em boas práticas de desenv
 
 Este projeto tem como objetivo praticar e demonstrar conhecimentos em:
 
-- Desenvolvimento de APIs REST com Spring Boot  
-- Arquitetura em camadas (Controller, Service, Repository)  
-- Uso de DTOs para desacoplamento de entidades  
-- Validação de dados com Bean Validation  
-- Tratamento global de exceções  
-- Regras de negócio na camada de serviço  
-- Testes unitários com JUnit e Mockito  
-- Filtros dinâmicos com Specification  
-- Cobertura de testes com JaCoCo  
+* Desenvolvimento de APIs REST com Spring Boot
+* Arquitetura em camadas (Controller, Service, Repository)
+* Uso de DTOs para desacoplamento de entidades
+* Validação de dados com Bean Validation
+* Tratamento global de exceções
+* Regras de negócio na camada de serviço
+* Testes unitários com JUnit e Mockito
+* Filtros dinâmicos com Specification
+* Cobertura de testes com JaCoCo
 
 ---
 
@@ -40,52 +39,63 @@ Este projeto tem como objetivo praticar e demonstrar conhecimentos em:
 
 O projeto segue arquitetura em camadas:
 
-**Controller → Service → Repository**
+**Controller → Service → Domain → Repository**
 
 Com separação clara de responsabilidades e uso de DTOs para comunicação segura entre camadas.
+
+### 🔥 Melhorias aplicadas recentemente
+
+* Introdução de camada **Domain** para centralização de regras de negócio
+* Uso de **Factory** para criação consistente de entidades
+* Implementação de **Histórico de produtos (auditoria)** no banco de dados
+* Regras de negócio movidas para o domínio para maior coesão
 
 ---
 
 # 🛠️ Tecnologias Utilizadas
 
-- Java 17+ / 21  
-- Spring Boot  
-- Spring Web  
-- Spring Data JPA  
-- Hibernate   
-- Maven  
-- JUnit 5  
-- Mockito  
-- MapStruct  
-- JaCoCo  
-- h2 database(banco local) 
+* Java 17+ / 21
+* Spring Boot
+* Spring Web
+* Spring Data JPA
+* Hibernate
+* Maven
+* JUnit 5
+* Mockito
+* MapStruct
+* JaCoCo
+* h2 database (banco local)
+
 ---
 
 # 🧪 Qualidade de Código
 
-- Testes unitários com JUnit 5 + Mockito  
-- Cobertura de testes com JaCoCo  
-- Tratamento global de exceções  
-- Validações com Bean Validation  
-- Código baseado em Clean Code  
+* Testes unitários com JUnit 5 + Mockito
+* Cobertura de testes com JaCoCo
+* Tratamento global de exceções
+* Validações com Bean Validation
+* Código baseado em Clean Code
 
 ---
 
 # 📦 Funcionalidades da API
 
-- Criar produto  
-- Buscar por ID  
-- Listar produtos  
-- Atualizar produto  
-- Remover produto  
-- Buscar com filtros dinâmicos  
-- Merge de produtos (regra de negócio de quantidade)  
+* Criar produto
+* Buscar por ID
+* Listar produtos
+* Atualizar produto
+* Remover produto
+* Buscar com filtros dinâmicos
+* Merge de produtos (regra de negócio de quantidade)
+* Registro de histórico de alterações de produtos
 
 ---
 
 # 🔍 Regras de Negócio
 
-- Se um produto já existir (mesmo nome, preço e status), sua quantidade é somada ao invés de criar um novo registro.
+* Se um produto já existir (mesmo nome, preço e status), sua quantidade é somada ao invés de criar um novo registro.
+* Produtos com status **ESGOTADO** não podem ter quantidade maior que zero.
+* Produtos com quantidade zero e status ATIVO não podem ser persistidos.
 
 ---
 
@@ -98,7 +108,7 @@ Com separação clara de responsabilidades e uso de DTOs para comunicação segu
   "error": "Produto não encontrado",
   "message": "ID informado não existe na base"
 }
-````
+```
 
 ---
 
@@ -109,12 +119,15 @@ src/main/java
 └── com.produtoapi
     ├── controller
     ├── service
+    ├── domain
+    ├── factory
     ├── repository
     ├── dto
     ├── model
     ├── mapper
     ├── specification
-    └── exception
+    ├── exception
+    └── historico
 ```
 
 ---
@@ -125,6 +138,9 @@ src/main/java
 * DTOs usados para desacoplamento total da entidade
 * Merge de produtos implementado como regra de negócio real
 * Foco em testes unitários ao invés de apenas CRUD básico
+* Inclusão de camada de **Domain** para regras de negócio
+* Uso de **Factory** para padronização de criação de objetos
+* Implementação de **Histórico (auditoria)** para rastreabilidade de dados
 
 ---
 
@@ -137,6 +153,7 @@ Este projeto evoluiu para nível profissional com:
 * Filtros dinâmicos (Specification)
 * Estrutura escalável
 * Cobertura de testes validada
+* Separação clara de domínio e infraestrutura
 
 ---
 
@@ -157,5 +174,3 @@ cd springboot-product-api
 **Silvio Rodrigues Vieira Filho**
 
 📌 Projeto de estudo e evolução contínua em Java Backend
-
-
