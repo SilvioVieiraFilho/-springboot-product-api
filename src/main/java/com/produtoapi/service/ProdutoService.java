@@ -1,17 +1,14 @@
 package com.produtoapi.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.produtoapi.domain.ProdutoDomainService;
+import com.produtoapi.exception.ProdutoNotFoundException;
 import com.produtoapi.factory.ProdutoFactory;
 import com.produtoapi.specification.ProdutoSpecification;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +16,6 @@ import com.produtoapi.dto.ProdutoRequestDTO;
 import com.produtoapi.dto.ProdutoResponseDTO;
 import com.produtoapi.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
-import com.produtoapi.exception.ProdutoNotFoundExcepetion;
 import com.produtoapi.mapper.ProdutoMapper;
 import com.produtoapi.model.*;
 import com.produtoapi.repository.ProdutoRepository;
@@ -71,7 +67,7 @@ public class ProdutoService {
 
 
         Produto produto = produtorepository.findById(id)
-                .orElseThrow(() -> new ProdutoNotFoundExcepetion(id));
+                .orElseThrow(() -> new ProdutoNotFoundException(id));
 
         produtorepository.delete(produto);
     }
@@ -79,7 +75,7 @@ public class ProdutoService {
     public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO dto) {
 
         Produto produto = produtorepository.findById(id)
-                .orElseThrow(() -> new ProdutoNotFoundExcepetion(id));
+                .orElseThrow(() -> new ProdutoNotFoundException(id));
 
         domain.atualizarDadosBasicos(produto, dto);
 
@@ -88,7 +84,7 @@ public class ProdutoService {
 
     public ProdutoResponseDTO buscarPorId(Long id) {
 
-        Produto produto = produtorepository.findById(id).orElseThrow(() -> new ProdutoNotFoundExcepetion(id));
+        Produto produto = produtorepository.findById(id).orElseThrow(() -> new ProdutoNotFoundException(id));
 
         return mapper.toDTO(produto);
     }
