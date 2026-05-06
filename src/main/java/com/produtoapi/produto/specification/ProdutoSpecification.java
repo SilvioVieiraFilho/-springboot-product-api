@@ -1,7 +1,7 @@
-package com.produtoapi.specification;
+package com.produtoapi.produto.specification;
 
 import com.produtoapi.enums.ProdutoStatus;
-import com.produtoapi.model.Produto;
+import com.produtoapi.produto.domain.Produto;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProdutoSpecification {
@@ -25,21 +25,21 @@ public class ProdutoSpecification {
 	}
 
 	public static Specification<Produto> minPreco(Double precoMin) {
-	    return (root, query, cb) -> {
-	        if (precoMin == null) {
-	            return null;
-	        }
-	        return cb.greaterThanOrEqualTo(root.get("preco"), precoMin);
-	    };
+		return (root, query, cb) -> {
+			if (precoMin == null) {
+				return cb.conjunction();
+			}
+			return cb.greaterThanOrEqualTo(root.get("preco"), precoMin);
+		};
 	}
 
 	public static Specification<Produto> maxPreco(Double precoMax) {
-	    return (root, query, cb) -> {
-	        if (precoMax == null) {
-	            return null;
-	        }
-	        return cb.lessThanOrEqualTo(root.get("preco"), precoMax);
-	    };
+		return (root, query, cb) -> {
+			if (precoMax == null) {
+				return cb.conjunction();
+			}
+			return cb.lessThanOrEqualTo(root.get("preco"), precoMax);
+		};
 	}
 
 }

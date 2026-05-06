@@ -1,10 +1,10 @@
-package com.produtoapi.repository;
+package com.produtoapi.produto.repository;
 import com.produtoapi.enums.ProdutoStatus;
-import com.produtoapi.model.Produto;
 
 import java.util.List;
 import java.util.Optional;
 
+import com.produtoapi.produto.domain.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

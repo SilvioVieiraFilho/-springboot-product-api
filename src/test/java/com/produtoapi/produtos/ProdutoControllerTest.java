@@ -1,9 +1,9 @@
 package com.produtoapi.produtos;
-import com.produtoapi.controller.ProdutoController;
-import com.produtoapi.dto.ProdutoRequestDTO;
-import com.produtoapi.dto.ProdutoResponseDTO;
+import com.produtoapi.produto.controller.ProdutoController;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
+import com.produtoapi.produto.dto.ProdutoResponseDTO;
 import com.produtoapi.enums.ProdutoStatus;
-import com.produtoapi.service.ProdutoService;
+import com.produtoapi.produto.service.ProdutoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,12 @@
-package com.produtoapi.mapper;
+package com.produtoapi.produto.mapper;
 
 import java.util.List;
 
+import com.produtoapi.produto.domain.Produto;
+import com.produtoapi.produto.dto.ProdutoResponseDTO;
 import org.mapstruct.Mapper;
 
-import com.produtoapi.dto.ProdutoRequestDTO;
-import com.produtoapi.dto.ProdutoResponseDTO;
-import com.produtoapi.model.Produto;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
 
 @Mapper(componentModel  = "spring")
 

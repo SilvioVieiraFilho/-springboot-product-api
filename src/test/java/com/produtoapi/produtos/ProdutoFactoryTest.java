@@ -1,10 +1,10 @@
 package com.produtoapi.produtos;
 
 
-import com.produtoapi.dto.ProdutoRequestDTO;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
 import com.produtoapi.enums.ProdutoStatus;
-import com.produtoapi.factory.ProdutoFactory;
-import com.produtoapi.model.Produto;
+import com.produtoapi.produto.domain.ProdutoFactory;
+import com.produtoapi.produto.domain.Produto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ class ProdutoFactoryTest {
     @Test
     void deveCriarProdutoAPartirDoDTO() {
 
-        // Given
+
         ProdutoRequestDTO dto = ProdutoRequestDTO.builder()
                 .nome("Produto A")
                 .preco(10.0)
@@ -30,10 +30,10 @@ class ProdutoFactoryTest {
                 .status(ProdutoStatus.ATIVO)
                 .build();
 
-        // When
+
         Produto produto = factory.criar(dto);
 
-        // Then
+
         assertThat(produto).isNotNull();
         assertThat(produto.getNome()).isEqualTo("Produto A");
         assertThat(produto.getPreco()).isEqualTo(10.0);
@@ -41,21 +41,21 @@ class ProdutoFactoryTest {
         assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ATIVO);
     }
 
+
     @Test
-    void deveCriarProdutoComCamposNulos() {
+    void deveCriarProdutoComQuantidadeZero() {
 
-        // Given
-        ProdutoRequestDTO dto = ProdutoRequestDTO.builder().build();
+        ProdutoRequestDTO dto = ProdutoRequestDTO.builder()
+                .nome("Teclado")
+                .preco(50.0)
+                .quantidade(0)
+                .status(ProdutoStatus.ESGOTADO)
+                .build();
 
-        // When
         Produto produto = factory.criar(dto);
 
-        // Then
-        assertThat(produto).isNotNull();
-        assertThat(produto.getNome()).isNull();
-        assertThat(produto.getPreco()).isNull();
-        assertThat(produto.getQuantidade()).isNull();
-        assertThat(produto.getStatus()).isNull();
+        assertThat(produto.getQuantidade()).isZero();
+        assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ESGOTADO);
     }
 
 }

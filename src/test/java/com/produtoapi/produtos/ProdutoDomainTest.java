@@ -1,11 +1,11 @@
 package com.produtoapi.produtos;
 
-import com.produtoapi.domain.ProdutoDomainService;
-import com.produtoapi.dto.ProdutoRequestDTO;
+import com.produtoapi.produto.domain.ProdutoDomainService;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
 import com.produtoapi.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
 import com.produtoapi.model.HistoricosProdutos;
-import com.produtoapi.model.Produto;
+import com.produtoapi.produto.domain.Produto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,124 +13,128 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ProdutoDomainTest {
 
-    private ProdutoDomainService domain;
+class ProdutoDomainTest {
 
-    @BeforeEach
-    void setup() {
-        domain = new ProdutoDomainService();
+    // =====================================================
+    // 🔥 ADICIONAR QUANTIDADE
+    // =====================================================
+    @Test
+    void deveAdicionarQuantidadeEAtualizarStatus() {
+
+        Produto produto = Produto.builder()
+                .quantidade(5)
+                .status(ProdutoStatus.ATIVO)
+                .build();
+
+        produto.adicionarQuantidade(3);
+
+        assertThat(produto.getQuantidade()).isEqualTo(8);
+        assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ATIVO);
+        assertThat(produto.getHistoricos()).hasSize(1);
     }
 
-    @Nested
-    class AtualizarProduto {
+    @Test
+    void deveLancarExcecaoAoAdicionarQuantidadeZeroOuNegativa() {
 
-        @Test
-        void deveAtualizarQuantidadeECriarHistorico() {
+        Produto produto = Produto.builder()
+                .quantidade(5)
+                .build();
 
-            Produto produto = Produto.builder()
-                    .nome("Peteca")
-                    .preco(20.0)
-                    .quantidade(5)
-                    .status(ProdutoStatus.ATIVO)
-                    .build();
+        assertThatThrownBy(() -> produto.adicionarQuantidade(0))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("maior que zero");
 
-            ProdutoRequestDTO dto = ProdutoRequestDTO.builder()
-                    .quantidade(3)
-                    .build();
-
-            domain.atualizar(produto, dto);
-
-            assertThat(produto.getQuantidade()).isEqualTo(8);
-            assertThat(produto.getHistoricos()).hasSize(1);
-
-            HistoricosProdutos historicoInicial = produto.getHistoricos().get(0);
-
-            assertThat(historicoInicial.getQuantidadeAnterior()).isEqualTo(5);
-            assertThat(historicoInicial.getQuantidadeNova()).isEqualTo(8);
-            assertThat(historicoInicial.getDiferenca()).isEqualTo(3);
-
-            assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ATIVO);
-        }
+        assertThatThrownBy(() -> produto.adicionarQuantidade(-1))
+                .isInstanceOf(BusinessException.class);
     }
 
-    @Nested
-    class InicializarProduto {
+    // =====================================================
+    // 🔥 REMOVER QUANTIDADE
+    // =====================================================
+    @Test
+    void deveRemoverQuantidadeComSucesso() {
 
-        @Test
-        void deveCriarHistoricoInicial() {
+        Produto produto = Produto.builder()
+                .quantidade(10)
+                .status(ProdutoStatus.ATIVO)
+                .build();
 
-            Produto produto = Produto.builder()
-                    .nome("Peteca")
-                    .preco(20.0)
-                    .quantidade(5)
-                    .status(ProdutoStatus.ATIVO)
-                    .build();
+        produto.removerQuantidade(4);
 
-            domain.inicializar(produto);
-
-            assertThat(produto.getHistoricos()).hasSize(1);
-
-            HistoricosProdutos historicoInicial = produto.getHistoricos().get(0);
-
-            assertThat(historicoInicial.getQuantidadeAnterior()).isEqualTo(0);
-            assertThat(historicoInicial.getQuantidadeNova()).isEqualTo(5);
-        }
-
-        @Test
-        void deveMarcarComoEsgotadoQuandoQuantidadeZero() {
-
-            Produto produto = Produto.builder()
-                    .nome("Peteca")
-                    .preco(50.0)
-                    .quantidade(0)
-                    .status(ProdutoStatus.ESGOTADO)
-                    .build();
-
-            domain.inicializar(produto);
-
-            assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ESGOTADO);
-        }
+        assertThat(produto.getQuantidade()).isEqualTo(6);
+        assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ATIVO);
+        assertThat(produto.getHistoricos()).hasSize(1);
     }
 
-    @Nested
-    class AtualizarDadosBasicos {
+    @Test
+    void deveMarcarComoEsgotadoQuandoZerarEstoque() {
 
-        @Test
-        void deveAtualizarSomenteCamposPreenchidos() {
+        Produto produto = Produto.builder()
+                .quantidade(5)
+                .status(ProdutoStatus.ATIVO)
+                .build();
 
-            Produto produto = Produto.builder()
-                    .nome("Nome antigo")
-                    .preco(10.0)
-                    .quantidade(4)
-                    .status(ProdutoStatus.ATIVO)
-                    .build();
+        produto.removerQuantidade(5);
 
-            ProdutoRequestDTO dto = new ProdutoRequestDTO();
-            dto.setNome("Novo Nome");
-
-            domain.atualizarDadosBasicos(produto, dto);
-
-            assertThat(produto.getNome()).isEqualTo("Novo Nome");
-            assertThat(produto.getPreco()).isEqualTo(10.0);
-            assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ATIVO);
-            assertThat(produto.getQuantidade()).isEqualTo(4);
-        }
+        assertThat(produto.getQuantidade()).isZero();
+        assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ESGOTADO);
     }
 
-    @Nested
-    class Validacoes {
+    @Test
+    void deveLancarExcecaoQuandoEstoqueFicarNegativo() {
 
-        @Test
-        void deveLancarExcecaoQuandoStatusEsgotadoComQuantidadeMaiorQueZero() {
+        Produto produto = Produto.builder()
+                .quantidade(3)
+                .build();
 
-            ProdutoRequestDTO dto = new ProdutoRequestDTO();
-            dto.setStatus(ProdutoStatus.ESGOTADO);
-            dto.setQuantidade(5);
+        assertThatThrownBy(() -> produto.removerQuantidade(10))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("negativo");
+    }
 
-            assertThatThrownBy(() -> domain.validarStatusEsgotado(dto))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("ESGOTADO");
-        }
+    // =====================================================
+    // 🔥 DEFINIR QUANTIDADE DIRETA
+    // =====================================================
+    @Test
+    void deveDefinirQuantidadeComSucesso() {
+
+        Produto produto = Produto.builder()
+                .quantidade(5)
+                .status(ProdutoStatus.ATIVO)
+                .build();
+
+        produto.definirQuantidade(10);
+
+        assertThat(produto.getQuantidade()).isEqualTo(10);
+        assertThat(produto.getHistoricos()).hasSize(1);
+    }
+
+    @Test
+    void deveLancarExcecaoAoDefinirQuantidadeNegativa() {
+
+        Produto produto = Produto.builder()
+                .quantidade(5)
+                .build();
+
+        assertThatThrownBy(() -> produto.definirQuantidade(-1))
+                .isInstanceOf(BusinessException.class);
+    }
+
+    // =====================================================
+    // 🔥 STATUS
+    // =====================================================
+    @Test
+    void deveMarcarComoEsgotadoQuandoQuantidadeZero() {
+
+        Produto produto = Produto.builder()
+                .quantidade(1)
+                .status(ProdutoStatus.ATIVO)
+                .build();
+
+        produto.removerQuantidade(1);
+
+        assertThat(produto.getStatus()).isEqualTo(ProdutoStatus.ESGOTADO);
     }
 }
+

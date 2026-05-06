@@ -1,16 +1,18 @@
 package com.produtoapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.produtoapi.model.Produto;
+import com.produtoapi.produto.domain.Produto;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class HistoricosProdutos {
 
     @Id

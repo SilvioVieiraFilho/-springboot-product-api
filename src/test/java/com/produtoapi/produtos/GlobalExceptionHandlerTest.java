@@ -1,6 +1,6 @@
 package com.produtoapi.produtos;
 
-import com.produtoapi.dto.ProdutoRequestDTO;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
 import com.produtoapi.exception.BusinessException;
 import com.produtoapi.exception.GlobalExceptionHandler;
 import com.produtoapi.exception.ProdutoNotFoundException;

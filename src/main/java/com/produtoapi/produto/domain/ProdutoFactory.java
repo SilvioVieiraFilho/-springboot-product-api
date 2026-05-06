@@ -1,6 +1,6 @@
-package com.produtoapi.factory;
-import com.produtoapi.dto.ProdutoRequestDTO;
-import com.produtoapi.model.Produto;
+package com.produtoapi.produto.domain;
+import com.produtoapi.produto.domain.Produto;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
 import org.springframework.stereotype.Component;
 
 

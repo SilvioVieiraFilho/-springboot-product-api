@@ -1,16 +1,16 @@
 package com.produtoapi.produtos;
 
-import com.produtoapi.dto.ProdutoRequestDTO;
-import com.produtoapi.dto.ProdutoResponseDTO;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
+import com.produtoapi.produto.dto.ProdutoResponseDTO;
 import com.produtoapi.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
 import com.produtoapi.exception.ProdutoNotFoundException;
-import com.produtoapi.factory.ProdutoFactory;
-import com.produtoapi.mapper.ProdutoMapper;
-import com.produtoapi.model.Produto;
-import com.produtoapi.repository.ProdutoRepository;
-import com.produtoapi.service.ProdutoService;
-import com.produtoapi.domain.ProdutoDomainService;
+import com.produtoapi.produto.domain.ProdutoFactory;
+import com.produtoapi.produto.mapper.ProdutoMapper;
+import com.produtoapi.produto.domain.Produto;
+import com.produtoapi.produto.repository.ProdutoRepository;
+import com.produtoapi.produto.service.ProdutoService;
+import com.produtoapi.produto.domain.ProdutoDomainService;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,194 +27,184 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProdutoServiceTest {
 
-	@InjectMocks
-	private ProdutoService service;
+    @InjectMocks
+    private ProdutoService service;
 
-	@Mock
-	private ProdutoRepository repository;
+    @Mock private ProdutoRepository repository;
+    @Mock private ProdutoMapper mapper;
+    @Mock private ProdutoFactory factory;
+    @Mock private ProdutoDomainService domain;
 
-	@Mock
-	private ProdutoMapper mapper;
+    @Nested
+    class Listar {
 
-	@Mock
-	private ProdutoFactory factory;
+        @Test
+        void deveListarProdutos() {
+            Produto produto = Produto.builder().id(1L).nome("Mouse").build();
+            ProdutoResponseDTO dto = ProdutoResponseDTO.builder().id(1L).nome("Mouse").build();
 
-	@Mock
-	private ProdutoDomainService domain;
+            when(repository.findAll()).thenReturn(List.of(produto));
+            when(mapper.toDTO(produto)).thenReturn(dto);
 
+            List<ProdutoResponseDTO> result = service.listarTodos();
 
+            assertEquals(1, result.size());
+            verify(repository).findAll();
+            verify(mapper).toDTO(produto);
+        }
+    }
 
-	@Nested
-	class ListarTodos {
+    @Nested
+    class Salvar {
 
-		@Test
-		void deveListarTodosProdutos() {
+        @Test
+        void deveCriarNovoProduto() {
 
-			Produto produto = Produto.builder().id(1L).nome("Mouse").build();
-			ProdutoResponseDTO dto = ProdutoResponseDTO.builder().id(1L).nome("Mouse").build();
+            ProdutoRequestDTO dto = ProdutoRequestDTO.builder()
+                    .nome("Mouse")
+                    .quantidade(1)
+                    .preco(10.0)
+                    .status(ProdutoStatus.ATIVO)
+                    .build();
 
-			when(repository.findAll()).thenReturn(List.of(produto));
-			when(mapper.toDTO(produto)).thenReturn(dto);
+            Produto produto = Produto.builder().nome("Mouse").build();
+            Produto salvo = Produto.builder().id(1L).nome("Mouse").build();
+            ProdutoResponseDTO response = ProdutoResponseDTO.builder().id(1L).nome("Mouse").build();
 
-			List<ProdutoResponseDTO> result = service.listarTodos();
+            when(repository.findByNomeAndPrecoAndStatus(dto.getNome(), dto.getPreco(), dto.getStatus()))
+                    .thenReturn(Optional.empty());
 
-			assertEquals(1, result.size());
-			assertEquals("Mouse", result.get(0).getNome());
+            when(factory.criar(dto)).thenReturn(produto);
+            when(repository.save(produto)).thenReturn(salvo);
+            when(mapper.toDTO(salvo)).thenReturn(response);
 
-			verify(repository).findAll();
-		}
-	}
+            ProdutoResponseDTO result = service.salvar(dto);
 
-	@Nested
-	class Salvar {
+            assertNotNull(result);
+            verify(domain).inicializar(produto);
+            verify(factory).criar(dto);
+            verify(repository).save(produto);
+        }
+    }
 
-		@Test
-		void deveSalvarNovoProduto() {
+    @Nested
+    class Atualizar {
 
-			ProdutoRequestDTO dto = ProdutoRequestDTO.builder()
-					.nome("Mouse")
-					.quantidade(1)
-					.preco(10.0)
-					.status(ProdutoStatus.ATIVO)
-					.build();
+        @Test
+        void deveAtualizarProdutoComSucesso() {
 
-			Produto produto = Produto.builder().nome("Mouse").build();
-			Produto salvo = Produto.builder().id(1L).nome("Mouse").build();
-			ProdutoResponseDTO response = ProdutoResponseDTO.builder().id(1L).nome("Mouse").build();
+            Long id = 1L;
 
-			when(repository.findByNomeAndPrecoAndStatus(
-					dto.getNome(), dto.getPreco(), dto.getStatus()
-			)).thenReturn(Optional.empty());
+            ProdutoRequestDTO dto = ProdutoRequestDTO.builder()
+                    .nome("Mouse Gamer")
+                    .preco(150.0)
+                    .quantidade(10)
+                    .build();
 
-			when(factory.criar(dto)).thenReturn(produto);
-			when(repository.save(produto)).thenReturn(salvo);
-			when(mapper.toDTO(salvo)).thenReturn(response);
+            Produto produto = Produto.builder()
+                    .id(id)
+                    .nome("Mouse")
+                    .preco(100.0)
+                    .quantidade(5)
+                    .build();
 
-			ProdutoResponseDTO result = service.salvar(dto);
+            ProdutoResponseDTO response = ProdutoResponseDTO.builder()
+                    .id(id)
+                    .nome("Mouse Gamer")
+                    .build();
 
-			assertNotNull(result);
-			assertEquals("Mouse", result.getNome());
+            when(repository.findById(id)).thenReturn(Optional.of(produto));
+            when(repository.save(produto)).thenReturn(produto);
+            when(mapper.toDTO(produto)).thenReturn(response);
 
-			verify(domain).inicializar(produto);
-			verify(factory).criar(dto);
-			verify(repository).save(produto);
-		}
+            ProdutoResponseDTO result = service.atualizarProduto(id, dto);
 
-		@Test
-		void deveAtualizarProdutoExistenteNoSalvar() {
+            assertNotNull(result);
+            assertEquals("Mouse Gamer", result.getNome());
 
-			ProdutoRequestDTO dto = ProdutoRequestDTO.builder().nome("Mouse").build();
+            verify(domain).atualizarDadosBasicos(produto, dto.getNome(), dto.getPreco(), dto.getQuantidade());
+            verify(repository).save(produto);
+            verify(mapper).toDTO(produto);
+        }
 
-			Produto existente = Produto.builder().id(1L).nome("Mouse").build();
-			Produto atualizado = Produto.builder().id(1L).nome("Mouse Atualizado").build();
-			ProdutoResponseDTO response = ProdutoResponseDTO.builder().id(1L).nome("Mouse Atualizado").build();
+        @Test
+        void deveLancarErroQuandoProdutoNaoExistir() {
 
-			when(repository.findByNomeAndPrecoAndStatus(
-					dto.getNome(), dto.getPreco(), dto.getStatus()
-			)).thenReturn(Optional.of(existente));
+            Long id = 1L;
 
-			when(domain.atualizar(existente, dto)).thenReturn(atualizado);
-			when(repository.save(atualizado)).thenReturn(atualizado);
-			when(mapper.toDTO(atualizado)).thenReturn(response);
+            when(repository.findById(id)).thenReturn(Optional.empty());
 
-			ProdutoResponseDTO result = service.salvar(dto);
+            assertThrows(ProdutoNotFoundException.class,
+                    () -> service.atualizarProduto(id, new ProdutoRequestDTO()));
 
-			assertEquals("Mouse Atualizado", result.getNome());
+            verify(repository, never()).save(any());
+            verify(domain, never()).atualizarDadosBasicos(any(), any(), any(), any());
+        }
+    }
 
-			verify(domain).atualizar(existente, dto);
-		}
+    @Nested
+    class Deletar {
 
-		@Test
-		void deveLancarErroQuandoDtoForNulo() {
-			assertThrows(NullPointerException.class, () -> service.salvar(null));
-		}
-	}
+        @Test
+        void deveDeletarProduto() {
 
-	// ---------------- DELETE ----------------
+            Produto produto = Produto.builder().id(1L).build();
 
-	@Nested
-	class Deletar {
+            when(repository.findById(1L)).thenReturn(Optional.of(produto));
 
-		@Test
-		void deveDeletarProduto() {
+            service.deletarProduto(1L);
 
-			Produto produto = Produto.builder().id(1L).build();
+            verify(repository).delete(produto);
+        }
 
-			when(repository.findById(1L)).thenReturn(Optional.of(produto));
+        @Test
+        void deveLancarErroSeNaoExistir() {
 
-			service.deletarProduto(1L);
+            when(repository.findById(1L)).thenReturn(Optional.empty());
 
-			verify(repository).delete(produto);
-		}
+            assertThrows(ProdutoNotFoundException.class,
+                    () -> service.deletarProduto(1L));
+        }
+    }
 
-		@Test
-		void deveLancarErroAoDeletarSeNaoExistir() {
+    @Nested
+    class Buscar {
 
-			when(repository.findById(1L)).thenReturn(Optional.empty());
+        @Test
+        void deveBuscarPorId() {
 
-			assertThrows(ProdutoNotFoundException.class,
-					() -> service.deletarProduto(1L));
-		}
-	}
+            Produto produto = Produto.builder().id(1L).build();
+            ProdutoResponseDTO dto = ProdutoResponseDTO.builder().id(1L).build();
 
-	// ---------------- BUSCAR POR ID ----------------
+            when(repository.findById(1L)).thenReturn(Optional.of(produto));
+            when(mapper.toDTO(produto)).thenReturn(dto);
 
-	@Nested
-	class BuscarPorId {
+            ProdutoResponseDTO result = service.buscarPorId(1L);
 
-		@Test
-		void deveBuscarPorId() {
+            assertEquals(1L, result.getId());
+        }
+    }
 
-			Produto produto = Produto.builder().id(1L).build();
-			ProdutoResponseDTO dto = ProdutoResponseDTO.builder().id(1L).build();
+    @Nested
+    class Filtro {
 
-			when(repository.findById(1L)).thenReturn(Optional.of(produto));
-			when(mapper.toDTO(produto)).thenReturn(dto);
+        @Test
+        void deveLancarErroFiltroNulo() {
+            assertThrows(BusinessException.class,
+                    () -> service.buscarFiltro(null, null, null, null));
+        }
 
-			ProdutoResponseDTO result = service.buscarPorId(1L);
+        @Test
+        void deveBuscarComFiltro() {
 
-			assertNotNull(result);
-			assertEquals(1L, result.getId());
-		}
-	}
+            Produto produto = Produto.builder().id(1L).nome("Mouse").build();
 
-	// ---------------- FILTRO ----------------
+            when(repository.findAll(any(Specification.class))).thenReturn(List.of(produto));
+            when(mapper.toDTO(produto)).thenReturn(ProdutoResponseDTO.builder().id(1L).nome("Mouse").build());
 
-	@Nested
-	class BuscarFiltro {
+            List<ProdutoResponseDTO> result = service.buscarFiltro("Mouse", null, null, null);
 
-		@Test
-		void deveLancarErroQuandoFiltroForNulo() {
-
-			assertThrows(BusinessException.class,
-					() -> service.buscarFiltro(null, null, null, null));
-		}
-
-		@Test
-		void deveBuscarComFiltro() {
-
-			Produto produto = Produto.builder().id(1L).nome("Mouse").build();
-			ProdutoResponseDTO dto = ProdutoResponseDTO.builder().id(1L).nome("Mouse").build();
-
-			when(repository.findAll(any(Specification.class)))
-					.thenReturn(List.of(produto));
-
-			when(mapper.toDTO(produto)).thenReturn(dto);
-
-			List<ProdutoResponseDTO> result =
-					service.buscarFiltro("Mouse", null, null, null);
-
-			assertEquals(1, result.size());
-		}
-
-		@Test
-		void deveLancarErroSeNaoEncontrarProdutos() {
-
-			when(repository.findAll(any(Specification.class)))
-					.thenReturn(List.of());
-
-			assertThrows(BusinessException.class,
-					() -> service.buscarFiltro("Mouse", null, null, null));
-		}
-	}
+            assertEquals(1, result.size());
+        }
+    }
 }

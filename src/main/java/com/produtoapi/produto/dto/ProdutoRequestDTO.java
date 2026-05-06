@@ -1,4 +1,4 @@
-package com.produtoapi.dto;
+package com.produtoapi.produto.dto;
 
 import com.produtoapi.enums.ProdutoStatus;
 
@@ -20,10 +20,11 @@ public class ProdutoRequestDTO {
 	private String nome;
 
 	@NotNull(message = "Preço é obrigatório")
-	@Positive(message = "Preço deve ser maior que zero")
+	@PositiveOrZero(message = "Preço deve ser maior que zero")
 	private Double preco;
 
 	@NotNull(message = "Quantidade é obrigatória")
+	@PositiveOrZero
 	@Min(value = 0, message = "Quantidade não pode ser negativa")
 	private Integer quantidade;
 

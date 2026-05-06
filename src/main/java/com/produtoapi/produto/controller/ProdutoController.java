@@ -1,19 +1,16 @@
-package com.produtoapi.controller;
+package com.produtoapi.produto.controller;
 
 import java.util.List;
 
-import javax.net.ssl.SSLEngineResult.Status;
-
+import com.produtoapi.produto.service.ProdutoService;
+import com.produtoapi.produto.dto.ProdutoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.produtoapi.dto.ProdutoRequestDTO;
-import com.produtoapi.dto.ProdutoResponseDTO;
+import com.produtoapi.produto.dto.ProdutoRequestDTO;
 import com.produtoapi.enums.ProdutoStatus;
-import com.produtoapi.service.ProdutoService;
 
 import jakarta.validation.Valid;
 import response.ApiResponse;
@@ -26,7 +23,7 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService serviceProduto;
 
-	// LISTAR
+
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<ProdutoResponseDTO>>> listarTodos() {
 
@@ -37,7 +34,7 @@ public class ProdutoController {
 		return ResponseEntity.ok(response);
 	}
 
-	// SALVAR
+
 	@PostMapping
 
 	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> salvarProduto(@Valid @RequestBody ProdutoRequestDTO dto) {
@@ -49,7 +46,7 @@ public class ProdutoController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	// DELETAR
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse<Void>> deletarProduto(@PathVariable Long id) {
 
@@ -71,7 +68,7 @@ public class ProdutoController {
 		return ResponseEntity.ok(response);
 	}
 
-	// ATUALIZAR
+
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> atualizarProduto(@PathVariable Long id,
 			@Valid @RequestBody ProdutoRequestDTO dto) {

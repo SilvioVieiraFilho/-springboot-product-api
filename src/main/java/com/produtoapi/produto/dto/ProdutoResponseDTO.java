@@ -1,4 +1,4 @@
-package com.produtoapi.dto;
+package com.produtoapi.produto.dto;
 
 import com.produtoapi.enums.ProdutoStatus;
 
