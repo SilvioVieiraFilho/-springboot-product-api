@@ -32,23 +32,43 @@ Este projeto tem como objetivo praticar e demonstrar conhecimentos em:
 * Testes unitários com JUnit e Mockito
 * Filtros dinâmicos com Specification
 * Cobertura de testes com JaCoCo
+* Evolução para arquitetura baseada em feature (Product Module)
 
 ---
 
 # 🧠 Arquitetura
 
-O projeto segue arquitetura em camadas:
+O projeto evoluiu para uma arquitetura híbrida:
 
 **Controller → Service → Domain → Repository**
 
-Com separação clara de responsabilidades e uso de DTOs para comunicação segura entre camadas.
+E também com separação por feature:
+
+```
+com.produtoapi.produto
+ ├── controller
+ ├── service
+ ├── domain
+ ├── factory
+ ├── repository
+ ├── dto
+ ├── mapper
+ ├── specification
+ └── historico
+```
+
+Essa abordagem melhora escalabilidade e organização por contexto de negócio.
+
+---
 
 ### 🔥 Melhorias aplicadas recentemente
 
-* Introdução de camada **Domain** para centralização de regras de negócio
+* Migração para **arquitetura baseada em feature (Product module)**
+* Reorganização completa de packages (domain, service, controller, repository, dto, mapper)
+* Remoção de classes legadas fora do módulo de produto
+* Introdução de camada **Domain** para regras de negócio
 * Uso de **Factory** para criação consistente de entidades
-* Implementação de **Histórico de produtos (auditoria)** no banco de dados
-* Regras de negócio movidas para o domínio para maior coesão
+* Implementação de histórico de produtos (auditoria)
 
 ---
 
@@ -64,7 +84,30 @@ Com separação clara de responsabilidades e uso de DTOs para comunicação segu
 * Mockito
 * MapStruct
 * JaCoCo
-* h2 database (banco local)
+* H2 Database (banco local)
+
+---
+
+# 🔐 Autenticação e Segurança (JWT)
+
+A API conta com autenticação baseada em **JSON Web Token (JWT)**, garantindo segurança nas requisições e controle de acesso.
+
+### 🔑 Como funciona
+
+* O usuário realiza login com credenciais válidas
+* O sistema gera um **token JWT assinado**
+* Esse token deve ser enviado nas requisições protegidas via header:
+
+```
+Authorization: Bearer <token>
+```
+
+### 🛡️ Recursos de segurança implementados
+
+* Autenticação stateless com JWT
+* Filtro de segurança interceptando requisições
+* Validação de token em todas as rotas protegidas
+* Controle de acesso baseado em role (USER / ADMIN)
 
 ---
 
@@ -117,30 +160,32 @@ Com separação clara de responsabilidades e uso de DTOs para comunicação segu
 ```
 src/main/java
 └── com.produtoapi
-    ├── controller
-    ├── service
-    ├── domain
-    ├── factory
-    ├── repository
-    ├── dto
-    ├── model
-    ├── mapper
-    ├── specification
+    ├── produto
+    │   ├── controller
+    │   ├── service
+    │   ├── domain
+    │   ├── factory
+    │   ├── repository
+    │   ├── dto
+    │   ├── mapper
+    │   ├── specification
+    │   └── historico
     ├── exception
-    └── historico
+    └── configuration
 ```
 
 ---
 
 # 🎯 Decisões de Arquitetura
 
-* Swagger removido para prática manual de responses
+* Remoção de estrutura monolítica em favor de **feature-based architecture**
+* Separação clara por contexto de negócio (Produto como módulo isolado)
 * DTOs usados para desacoplamento total da entidade
 * Merge de produtos implementado como regra de negócio real
 * Foco em testes unitários ao invés de apenas CRUD básico
-* Inclusão de camada de **Domain** para regras de negócio
+* Uso de **Domain Layer** para regras de negócio
 * Uso de **Factory** para padronização de criação de objetos
-* Implementação de **Histórico (auditoria)** para rastreabilidade de dados
+* Implementação de histórico (auditoria) para rastreabilidade
 
 ---
 
@@ -148,6 +193,7 @@ src/main/java
 
 Este projeto evoluiu para nível profissional com:
 
+* Arquitetura baseada em feature (Product module)
 * Regras de negócio reais
 * Testes automatizados
 * Filtros dinâmicos (Specification)
