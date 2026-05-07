@@ -1,7 +1,8 @@
-package com.produtoapi.security;
+package com.produtoapi.security.filter;
 
-import com.produtoapi.model.Usuario;
-import com.produtoapi.repository.UsuarioRepository;
+import com.produtoapi.security.service.JwtService;
+import com.produtoapi.usuario.domain.Usuario;
+import com.produtoapi.usuario.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        email = jwtService.extractUsername(jwt);
+        try {
+            email = jwtService.extractUsername(jwt);
+        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -51,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
                 return;
             }
+
 
             // 🔥 valida status
             try {

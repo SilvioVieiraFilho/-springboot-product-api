@@ -2,7 +2,7 @@ package com.produtoapi.produtos;
 
 import com.produtoapi.produto.dto.ProdutoRequestDTO;
 import com.produtoapi.produto.dto.ProdutoResponseDTO;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
 import com.produtoapi.exception.ProdutoNotFoundException;
 import com.produtoapi.produto.domain.ProdutoFactory;

@@ -1,6 +1,7 @@
-package com.produtoapi.security;
+package com.produtoapi.security.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,7 +15,7 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    // 🔥 Gere uma chave Base64 válida (não inventa string)
+
     private static final String SECRET_KEY = "ZHVtbXlLZXlTdXBlclNlY3JldEtleTEyMzQ1Njc4OTA=";
 
     private Key getSignKey() {

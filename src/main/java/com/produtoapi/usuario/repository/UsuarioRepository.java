@@ -1,6 +1,6 @@
-package com.produtoapi.repository;
+package com.produtoapi.usuario.repository;
 
-import com.produtoapi.model.Usuario;
+import com.produtoapi.usuario.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
     Optional<Usuario> findByEmail(String email);
+    boolean existsByEmail(String email);
 }

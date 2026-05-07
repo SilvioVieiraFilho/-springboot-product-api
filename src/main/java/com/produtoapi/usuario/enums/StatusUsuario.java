@@ -1,4 +1,6 @@
-package com.produtoapi.enums;
+package com.produtoapi.usuario.enums;
+
+import com.produtoapi.exception.BusinessException;
 
 public enum StatusUsuario {
 
@@ -12,7 +14,6 @@ public enum StatusUsuario {
 
     public void validarLogin() {
         if (!podeLogar()) {
-            throw new RuntimeException("Usuário não pode logar: " + this);
-        }
+            throw new BusinessException("Usuário inativo ou bloqueado");        }
     }
 }

@@ -1,5 +1,5 @@
 package com.produtoapi.produto.repository;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 
 import java.util.List;
 import java.util.Optional;

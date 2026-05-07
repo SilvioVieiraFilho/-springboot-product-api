@@ -1,13 +1,8 @@
 package com.produtoapi.produtos;
 
-import com.produtoapi.produto.domain.ProdutoDomainService;
-import com.produtoapi.produto.dto.ProdutoRequestDTO;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
-import com.produtoapi.model.HistoricosProdutos;
 import com.produtoapi.produto.domain.Produto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,9 +11,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProdutoDomainTest {
 
-    // =====================================================
-    // 🔥 ADICIONAR QUANTIDADE
-    // =====================================================
     @Test
     void deveAdicionarQuantidadeEAtualizarStatus() {
 
@@ -49,9 +41,6 @@ class ProdutoDomainTest {
                 .isInstanceOf(BusinessException.class);
     }
 
-    // =====================================================
-    // 🔥 REMOVER QUANTIDADE
-    // =====================================================
     @Test
     void deveRemoverQuantidadeComSucesso() {
 
@@ -93,9 +82,7 @@ class ProdutoDomainTest {
                 .hasMessageContaining("negativo");
     }
 
-    // =====================================================
-    // 🔥 DEFINIR QUANTIDADE DIRETA
-    // =====================================================
+
     @Test
     void deveDefinirQuantidadeComSucesso() {
 
@@ -121,9 +108,7 @@ class ProdutoDomainTest {
                 .isInstanceOf(BusinessException.class);
     }
 
-    // =====================================================
-    // 🔥 STATUS
-    // =====================================================
+
     @Test
     void deveMarcarComoEsgotadoQuandoQuantidadeZero() {
 

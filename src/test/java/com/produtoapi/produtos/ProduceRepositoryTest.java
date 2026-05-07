@@ -1,6 +1,6 @@
 package com.produtoapi.produtos;
 
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.produto.domain.Produto;
 import com.produtoapi.produto.repository.ProdutoRepository;
 import org.junit.jupiter.api.DisplayName;

@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.produtoapi.produto.dto.ProdutoRequestDTO;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
 
 @Service

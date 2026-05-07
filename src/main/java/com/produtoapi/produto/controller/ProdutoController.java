@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.produtoapi.produto.dto.ProdutoRequestDTO;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 
 import jakarta.validation.Valid;
 import response.ApiResponse;
@@ -57,16 +57,7 @@ public class ProdutoController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> buscarProdutoPorId(@PathVariable Long id) {
 
-		ProdutoResponseDTO produto = serviceProduto.buscarPorId(id);
-
-		ApiResponse<ProdutoResponseDTO> response = new ApiResponse<>("Sua busca por id foi requisitada com sucesso",
-				produto);
-
-		return ResponseEntity.ok(response);
-	}
 
 
 	@PutMapping("/{id}")
@@ -97,10 +88,21 @@ public class ProdutoController {
 			@RequestParam(required = false) String nome, @RequestParam(required = false) ProdutoStatus status,
 			@RequestParam(required = false) Double precoMin, @RequestParam(required = false) Double precoMax) {
 
-		List<ProdutoResponseDTO> produtos = serviceProduto.buscarFiltro(nome, status, precoMax, precoMin);
+		List<ProdutoResponseDTO> produtos = serviceProduto.buscarFiltro(nome, status, precoMin, precoMax);
 		ApiResponse<List<ProdutoResponseDTO>> response = new ApiResponse<List<ProdutoResponseDTO>>(
 				"Filtro realizado com sucesso", produtos);
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@GetMapping("/{id:\\d+}")
+	public ResponseEntity<ApiResponse<ProdutoResponseDTO>> buscarProdutoPorId(@PathVariable Long id) {
+
+		ProdutoResponseDTO produto = serviceProduto.buscarPorId(id);
+
+		ApiResponse<ProdutoResponseDTO> response = new ApiResponse<>("Sua busca por id foi requisitada com sucesso",
+				produto);
+
+		return ResponseEntity.ok(response);
 	}
 }

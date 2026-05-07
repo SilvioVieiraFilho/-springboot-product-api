@@ -2,7 +2,7 @@ package com.produtoapi.produtos;
 
 
 import com.produtoapi.produto.dto.ProdutoRequestDTO;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.produto.domain.ProdutoFactory;
 import com.produtoapi.produto.domain.Produto;
 import org.junit.jupiter.api.BeforeEach;

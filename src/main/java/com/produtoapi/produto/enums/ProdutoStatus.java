@@ -1,4 +1,4 @@
-package com.produtoapi.enums;
+package com.produtoapi.produto.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

@@ -1,7 +1,7 @@
 package com.produtoapi.produto.domain;
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.exception.BusinessException;
-import com.produtoapi.model.HistoricosProdutos;
+import com.produtoapi.historicoproduto.domain.HistoricosProdutos;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;

@@ -1,6 +1,6 @@
 package com.produtoapi.produto.specification;
 
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 import com.produtoapi.produto.domain.Produto;
 import org.springframework.data.jpa.domain.Specification;
 

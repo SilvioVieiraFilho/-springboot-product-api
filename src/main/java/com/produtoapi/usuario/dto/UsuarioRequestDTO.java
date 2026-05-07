@@ -1,12 +1,12 @@
-package com.produtoapi.dto;
+package com.produtoapi.usuario.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioRequestDTO {
 
     private String email;

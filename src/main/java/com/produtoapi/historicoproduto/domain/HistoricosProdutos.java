@@ -1,4 +1,4 @@
-package com.produtoapi.model;
+package com.produtoapi.historicoproduto.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.produtoapi.produto.domain.Produto;

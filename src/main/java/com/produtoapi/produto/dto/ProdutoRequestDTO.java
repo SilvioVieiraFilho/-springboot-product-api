@@ -1,6 +1,6 @@
 package com.produtoapi.produto.dto;
 
-import com.produtoapi.enums.ProdutoStatus;
+import com.produtoapi.produto.enums.ProdutoStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
