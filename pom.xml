@@ -177,6 +177,7 @@
                             <version>0.2.0</version>
                         </path>
 
+
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
@@ -204,6 +205,18 @@
                     </execution>
 
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/dto/**</exclude>
+                        <exclude>**/mapper/**</exclude>
+                        <exclude>**/configuration/**</exclude>
+                        <exclude>**/exception/**</exclude>
+                        <exclude>**/response/**</exclude>
+                        <exclude>**/specification/**</exclude>
+
+                    </excludes>
+                </configuration>
+
             </plugin>
 
         </plugins>

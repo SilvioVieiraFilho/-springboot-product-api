@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,13 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UsuarioServiceTest {
-@Mock
-UsuarioMapper mapper;
+
+    @Mock
+    UsuarioMapper mapper;
+
     @Mock
     private UsuarioRepository repository;
 
@@ -191,5 +191,96 @@ UsuarioMapper mapper;
             verifyNoInteractions(passwordEncoder);
             verifyNoInteractions(mapper);
         }
+    }
 
-    }}
+    @Nested
+    @DisplayName("Cadastro de usuário")
+    class CadastroUsuario {
+
+        @Test
+        void deveLancarErroQuandoEmailForNull() {
+
+            UsuarioRequestDTO dto = new UsuarioRequestDTO();
+            dto.setEmail(null);
+            dto.setSenha("123");
+
+            assertThrows(BusinessException.class,
+                    () -> usuarioService.salvar(dto));
+        }
+
+        @Test
+        void deveLancarErroQuandoEmailForVazio() {
+
+            UsuarioRequestDTO dto = new UsuarioRequestDTO();
+            dto.setEmail("");
+            dto.setSenha("123");
+
+            assertThrows(BusinessException.class,
+                    () -> usuarioService.salvar(dto));
+        }
+
+        @Test
+        void deveLancarErroQuandoSenhaForNull() {
+
+            UsuarioRequestDTO dto = new UsuarioRequestDTO();
+            dto.setEmail("teste@email.com");
+            dto.setSenha(null);
+
+            assertThrows(BusinessException.class,
+                    () -> usuarioService.salvar(dto));
+        }
+
+        @Test
+        void deveLancarErroQuandoEmailJaExiste() {
+
+            UsuarioRequestDTO dto = new UsuarioRequestDTO();
+            dto.setEmail("teste@email.com");
+            dto.setSenha("123");
+
+            when(repository.existsByEmail("teste@email.com"))
+                    .thenReturn(true);
+
+            assertThrows(BusinessException.class,
+                    () -> usuarioService.salvar(dto));
+        }
+
+        @Test
+        void deveSalvarUsuarioComSucesso() {
+
+            UsuarioRequestDTO dto = new UsuarioRequestDTO();
+            dto.setEmail("teste@email.com");
+            dto.setSenha("123");
+
+            Usuario usuario = new Usuario();
+            usuario.setEmail("teste@email.com");
+            usuario.setSenha("hash");
+
+            Usuario salvo = new Usuario();
+            salvo.setEmail("teste@email.com");
+
+            UsuarioResponseDTO response = UsuarioResponseDTO.builder()
+                    .email("teste@email.com")
+                    .build();
+
+            when(repository.existsByEmail("teste@email.com"))
+                    .thenReturn(false);
+
+            when(mapper.toEntity(dto))
+                    .thenReturn(usuario);
+
+            when(passwordEncoder.encode("hash"))
+                    .thenReturn("hash");
+
+            when(repository.save(usuario))
+                    .thenReturn(salvo);
+
+            when(mapper.toResponse(salvo))
+                    .thenReturn(response);
+
+            UsuarioResponseDTO result = usuarioService.salvar(dto);
+
+            assertNotNull(result);
+            assertEquals("teste@email.com", result.getEmail());
+        }
+    }
+}
