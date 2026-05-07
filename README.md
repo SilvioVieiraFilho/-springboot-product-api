@@ -1,144 +1,152 @@
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d6efd,100:6610f2&height=180&section=header&text=Spring%20Boot%20Product%20API&fontSize=28&fontColor=ffffff" />
-</p>
-
 # 🚀 Spring Boot Product API
 
-API REST desenvolvida com Java + Spring Boot, focada em boas práticas de desenvolvimento backend, arquitetura em camadas, testes unitários e qualidade de código.
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d6efd,100:6610f2&height=180&section=header&text=Product%20API%20System&fontSize=28&fontColor=ffffff" />
+</p>
+
+## 📌 Sobre o Projeto
+
+API REST desenvolvida com **Java + Spring Boot**, com foco em boas práticas de arquitetura moderna, segurança com JWT, testes automatizados e organização por domínio (Feature-Based Architecture).
+
+O sistema simula uma aplicação real de gestão de produtos com autenticação de usuários, regras de negócio complexas e histórico de alterações.
 
 ---
 
-# 🏷️ Tecnologias Utilizadas
+## 🧠 Objetivos
 
-![Java](https://img.shields.io/badge/Java-17%2B-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Framework-brightgreen)
-![JUnit](https://img.shields.io/badge/Tests-JUnit5-red)
-![Mockito](https://img.shields.io/badge/Mock-Mockito-blue)
-![Coverage](https://img.shields.io/badge/Coverage-JaCoCo-yellow)
-![Maven](https://img.shields.io/badge/Maven-Build-orange)
-
----
-
-# 📌 Objetivo do Projeto
-
-Este projeto tem como objetivo praticar e demonstrar conhecimentos em:
-
-* Desenvolvimento de APIs REST com Spring Boot
-* Arquitetura em camadas (Controller, Service, Repository)
-* Uso de DTOs para desacoplamento de entidades
-* Validação de dados com Bean Validation
-* Tratamento global de exceções
-* Regras de negócio na camada de serviço
-* Testes unitários com JUnit e Mockito
-* Filtros dinâmicos com Specification
-* Cobertura de testes com JaCoCo
-* Evolução para arquitetura baseada em feature (Product Module)
+- Criar uma API escalável e organizada por domínio
+- Aplicar arquitetura moderna (Feature-Based Architecture)
+- Implementar autenticação com JWT
+- Aplicar testes unitários com JUnit e Mockito
+- Trabalhar com regras de negócio reais
+- Garantir código limpo e de fácil manutenção
 
 ---
 
-# 🧠 Arquitetura
+## 🏗️ Arquitetura do Projeto
 
-O projeto evoluiu para uma arquitetura híbrida:
+O projeto foi estruturado em **Feature-Based Architecture**, separando cada domínio de forma independente.
 
-**Controller → Service → Domain → Repository**
-
-E também com separação por feature:
-
-```
-com.produtoapi.produto
- ├── controller
- ├── service
- ├── domain
- ├── factory
- ├── repository
- ├── dto
- ├── mapper
- ├── specification
- └── historico
-```
-
-Essa abordagem melhora escalabilidade e organização por contexto de negócio.
+com.produtoapi
+├── produto
+├── usuario
+├── security
+├── historicoproduto
+├── exception
+├── configuration
+└── response
 
 ---
 
-### 🔥 Melhorias aplicadas recentemente
+## 🧩 Estrutura por Domínio
 
-* Migração para **arquitetura baseada em feature (Product module)**
-* Reorganização completa de packages (domain, service, controller, repository, dto, mapper)
-* Remoção de classes legadas fora do módulo de produto
-* Introdução de camada **Domain** para regras de negócio
-* Uso de **Factory** para criação consistente de entidades
-* Implementação de histórico de produtos (auditoria)
+### 🟦 Produto
 
----
+produto
+├── controller
+├── service
+├── domain
+├── dto
+├── repository
+├── mapper
+├── enums
+├── specification
+└── historico
 
-# 🛠️ Tecnologias Utilizadas
-
-* Java 17+ / 21
-* Spring Boot
-* Spring Web
-* Spring Data JPA
-* Hibernate
-* Maven
-* JUnit 5
-* Mockito
-* MapStruct
-* JaCoCo
-* H2 Database (banco local)
 
 ---
 
-# 🔐 Autenticação e Segurança (JWT)
+### 🟩 Usuário
 
-A API conta com autenticação baseada em **JSON Web Token (JWT)**, garantindo segurança nas requisições e controle de acesso.
+usuario
+├── controller
+├── service
+├── domain
+├── dto
+├── repository
+├── mapper
+└── enums
 
-### 🔑 Como funciona
 
-* O usuário realiza login com credenciais válidas
-* O sistema gera um **token JWT assinado**
-* Esse token deve ser enviado nas requisições protegidas via header:
+---
 
-```
+### 🟪 Security (JWT)
+
+security
+├── config
+├── filter
+├── service
+└── controller
+
+
+
+---
+
+## 🔐 Autenticação
+
+A API utiliza **JWT (JSON Web Token)** para autenticação stateless.
+
+### Fluxo:
+
+1. Usuário realiza login
+2. API valida credenciais
+3. Token JWT é gerado
+4. Token enviado no header:
+
 Authorization: Bearer <token>
-```
 
-### 🛡️ Recursos de segurança implementados
-
-* Autenticação stateless com JWT
-* Filtro de segurança interceptando requisições
-* Validação de token em todas as rotas protegidas
-* Controle de acesso baseado em role (USER / ADMIN)
 
 ---
 
-# 🧪 Qualidade de Código
+## 🛡️ Segurança
 
-* Testes unitários com JUnit 5 + Mockito
-* Cobertura de testes com JaCoCo
-* Tratamento global de exceções
-* Validações com Bean Validation
-* Código baseado em Clean Code
-
----
-
-# 📦 Funcionalidades da API
-
-* Criar produto
-* Buscar por ID
-* Listar produtos
-* Atualizar produto
-* Remover produto
-* Buscar com filtros dinâmicos
-* Merge de produtos (regra de negócio de quantidade)
-* Registro de histórico de alterações de produtos
+- Autenticação JWT
+- Filtro de requisições protegidas
+- Controle de acesso por roles (USER / ADMIN)
+- Validação de token em todas as rotas protegidas
 
 ---
 
-# 🔍 Regras de Negócio
+## 📦 Funcionalidades
 
-* Se um produto já existir (mesmo nome, preço e status), sua quantidade é somada ao invés de criar um novo registro.
-* Produtos com status **ESGOTADO** não podem ter quantidade maior que zero.
-* Produtos com quantidade zero e status ATIVO não podem ser persistidos.
+### 🟦 Produto
+- Criar produto
+- Atualizar produto
+- Buscar por ID
+- Listar produtos
+- Filtros dinâmicos (Specification)
+- Merge de produtos (regra de negócio)
+- Histórico de alterações
+
+---
+
+### 🟩 Usuário
+- Cadastro de usuário
+- Autenticação
+- Controle de status:
+    - ATIVO
+    - DESATIVADO
+    - BLOQUEADO
+- Validação de login
+
+---
+
+## 🔍 Regras de Negócio
+
+- Produtos duplicados (mesmo nome, preço e status) somam quantidade automaticamente
+- Produtos com status **ESGOTADO** não podem receber quantidade
+- Usuários com status **DESATIVADO ou BLOQUEADO** não podem autenticar
+- Login exige e-mail e senha válidos
+- Usuário inativo não pode acessar o sistema
+
+---
+
+## 🧪 Testes
+
+- JUnit 5 para testes unitários
+- Mockito para mocks
+- Cobertura de testes com JaCoCo
+- Testes de service, domain e security
 
 ---
 
@@ -146,64 +154,69 @@ Authorization: Bearer <token>
 
 ```json
 {
-  "timestamp": "2026-04-27T10:30:00",
-  "status": 404,
-  "error": "Produto não encontrado",
-  "message": "ID informado não existe na base"
+  "timestamp": "2026-05-06T10:30:00",
+  "status": 400,
+  "error": "BusinessException",
+  "message": "Usuário inativo ou bloqueado"
 }
 ```
+___
+## 🛠️ Tecnologias utilizadas
+- Java 17+
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Hibernate
+- JWT
+- MapStruct
+- JUnit 5
+- Mockito
+- Maven
+- H2 Database
 
----
+___
 
-# 📁 Estrutura do Projeto
+## 📁 Estrutura do projeto
 
-```
 src/main/java
 └── com.produtoapi
-    ├── produto
-    │   ├── controller
-    │   ├── service
-    │   ├── domain
-    │   ├── factory
-    │   ├── repository
-    │   ├── dto
-    │   ├── mapper
-    │   ├── specification
-    │   └── historico
-    ├── exception
-    └── configuration
-```
+├── produto
+├── usuario
+├── security
+├── historicoproduto
+├── exception
+├── configuration
+└── response
 
----
+## 🎯 Arquitetura e decisões técnicas
+- Separação por domínio (Feature-Based Architecture)
+- Camada Domain para regras de negócio
+- DTOs para desacoplamento da entidade 
+- Mappers com MapStruct
+- Autenticação stateless com JWT
+- Histórico de produtos para auditoria
+- Filtros dinâmicos com Specification
+- Código organizado seguindo Clean Code e SOLID
+___
+ 
+## 📈 Evolução do projeto
 
-# 🎯 Decisões de Arquitetura
+Este projeto evoluiu para um nível próximo de aplicações reais de mercado:
 
-* Remoção de estrutura monolítica em favor de **feature-based architecture**
-* Separação clara por contexto de negócio (Produto como módulo isolado)
-* DTOs usados para desacoplamento total da entidade
-* Merge de produtos implementado como regra de negócio real
-* Foco em testes unitários ao invés de apenas CRUD básico
-* Uso de **Domain Layer** para regras de negócio
-* Uso de **Factory** para padronização de criação de objetos
-* Implementação de histórico (auditoria) para rastreabilidade
 
----
+✔️ Arquitetura escalável  
+✔️ Segurança com JWT  
+✔️ Domínios isolados  
+✔️ Regras de negócio reais  
+✔️ Testes automatizados  
+✔️ Código organizado e limpo  
+✔️ Pronto para evolução para microsserviços
+___
 
-# 📈 Evolução do Projeto
 
-Este projeto evoluiu para nível profissional com:
+## ▶️ Como executar o projeto
 
-* Arquitetura baseada em feature (Product module)
-* Regras de negócio reais
-* Testes automatizados
-* Filtros dinâmicos (Specification)
-* Estrutura escalável
-* Cobertura de testes validada
-* Separação clara de domínio e infraestrutura
-
----
-
-# ▶️ Como Executar o Projeto
+### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/SEU-USUARIO/springboot-product-api.git
@@ -212,11 +225,11 @@ cd springboot-product-api
 
 ./mvnw spring-boot:run
 ```
+___
 
----
 
-# 👨‍💻 Autor
 
-**Silvio Rodrigues Vieira Filho**
+👨‍💻 **Autor**  
+Silvio Rodrigues Vieira Filho  
 
-📌 Projeto de estudo e evolução contínua em Java Backend
+📌 Projeto pessoal focado em evolução como desenvolvedor backend Java
